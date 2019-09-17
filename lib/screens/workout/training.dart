@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_text_field.dart';
 
-class Workouts extends StatelessWidget {
+class Training extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardTitles = ['Train1', 'Train2', 'Train3'];
