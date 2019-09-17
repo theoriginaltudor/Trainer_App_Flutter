@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import './workouts.dart';
 import './training.dart';
-import './calendar.dart';
 
 const WorkoutsRoute = '/';
 const TrainingRoute = '/training';
-const CalendarRoute = '/calendar';
 
 class WorkoutRoutes extends StatelessWidget {
   @override
@@ -27,9 +25,9 @@ class WorkoutRoutes extends StatelessWidget {
         case TrainingRoute:
           screen = Training(arguments['id']);
           break;
-        case CalendarRoute:
-          screen = Calendar();
-          break;
+//         case CalendarRoute:
+//           screen = Calendar();
+//           break;
         default:
           return null;
       }
