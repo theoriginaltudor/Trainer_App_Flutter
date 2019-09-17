@@ -13,6 +13,10 @@ class Measurements extends StatelessWidget {
       CustomFlatButton(
         labelTitle: 'Save',
         horizontalPadding: 10.0,
+      ),
+      CustomFlatButton(
+        labelTitle: 'See graphs',
+        horizontalPadding: 10.0,
       )
     ]));
   }
