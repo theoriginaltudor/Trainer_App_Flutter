@@ -9,7 +9,7 @@ class WorkoutRoutes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
+    return Navigator(
       onGenerateRoute: _routes(),
     );
   }
