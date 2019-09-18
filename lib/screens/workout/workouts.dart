@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_card.dart';
 
@@ -11,14 +12,14 @@ class Workouts extends StatelessWidget {
       body: ListView(
         children: [
           CustomFlatButton(labelTitle: 'New Workout'),
-          CustomFlatButton(labelTitle: 'Copy previous', _onTap: openDatePicker),
+          CustomFlatButton(labelTitle: 'Copy previous', onTap: openDatePicker(context)),
           ...cards(cardTitles)
         ],
       ),
     );
   }
   
-  openDatePicker() {
+  openDatePicker(BuildContext context) {
     DatePicker.showDatePicker(context,
                               showTitleActions: true,
                               minTime: DateTime(2019, 9, 1),

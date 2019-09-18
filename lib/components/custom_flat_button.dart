@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class CustomFlatButton extends StatelessWidget {
   final String labelTitle;
   final double horizontalPadding;
-  final Function _onTap;
+  final Function onTap;
 
-  CustomFlatButton({@required this.labelTitle, this.horizontalPadding = 30.0, this._onTap});
+  CustomFlatButton({@required this.labelTitle, this.horizontalPadding = 30.0, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CustomFlatButton extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.blueAccent,
           onPressed: () => {
-            this._onTap();
+            this.onTap()
           },
           child: Text(
             labelTitle,
