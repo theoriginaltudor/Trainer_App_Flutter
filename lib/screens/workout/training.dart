@@ -3,11 +3,9 @@ import '../../components/custom_flat_button.dart';
 import '../../components/custom_text_field.dart';
 
 class Training extends StatelessWidget {
-  String _id;
+  final String _id;
 
-  Training(String stringID) {
-    this._id = stringID;
-  }
+  Training(this._id);
 
   @override
   Widget build(BuildContext context) {
