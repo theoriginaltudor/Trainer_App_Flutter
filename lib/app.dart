@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/workout/workout.dart';
+import 'screens/workout/workout_routes.dart';
 import 'screens/diet/diet.dart';
 import 'screens/more/more.dart';
 import 'screens/measurements/measurements.dart';
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              Workout(),
+              WorkoutRoutes(),
               Diet(),
               Measurements(),
               More(),
