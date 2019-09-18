@@ -20,15 +20,16 @@ class Workouts extends StatelessWidget {
   }
   
   openDatePicker(BuildContext context) {
-    DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime(2019, 9, 1),
-                              maxTime: DateTime.now(), onChanged: (date) {
-                            print('change $date');
-                          }, onConfirm: (date) {
-                                // navigate to training page with the workout from the chosen date
-                            print('confirm $date');
-                          }, currentTime: DateTime.now(), locale: LocaleType.zh);
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(2019, 9, 1),
+      maxTime: DateTime.now(), onChanged: (date) {
+        print('change $date');
+      }, onConfirm: (date) {
+        // navigate to training page with the workout from the chosen date
+        print('confirm $date');
+      }, currentTime: DateTime.now(), locale: LocaleType.zh);
   }
   List<Widget> cards(List<String> cardTitles) {
     return cardTitles.map((title) => CustomCard()).toList();
