@@ -5,27 +5,27 @@ import '../../components/custom_card.dart';
 class Workouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cardTitles = ['Protein', 'Fat', 'Carbs'];
+    final cardIDs = ['C011', 'A02', 'K444'];
 
     return Scaffold(
       body: ListView(
         children: [
-          CustomFlatButton(labelTitle: 'New Workout', onTap: () => {openTraining(context)}),
-          CustomFlatButton(labelTitle: 'Copy previous', onTap: () => {openCalendar(context)},),
-          ...cards(cardTitles)
+          CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, 'new')),
+          CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context)),
+          ...cards(context, cardIDs)
         ],
       ),
     );
   }
 
-  openTraining(BuildContext context) {
-    Navigator.pushNamed(context, '/training', arguments: {'id': 'new'});
+  openTraining(BuildContext context, String sID) {
+    Navigator.pushNamed(context, '/training', arguments: {'id': sID});
   }
   
   openCalendar(BuildContext context) {
     Navigator.pushNamed(context, '/calendar');
   }
-  List<Widget> cards(List<String> cardTitles) {
-    return cardTitles.map((title) => CustomCard()).toList();
+  List<Widget> cards(BuildContext context, List<String> cardIDs) {
+    return cardIDs.map((sID) => CustomCard(onTap: () => openTraining(context, sID))).toList();
   }
 }
