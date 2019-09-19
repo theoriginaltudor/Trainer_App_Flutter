@@ -12,10 +12,13 @@ class Training extends StatelessWidget {
     final cardTitles = ['Train1', 'Train2', 'Train3'];
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Training'),
+      ),
       body: ListView(
         children: [
-          CustomFlatButton(labelTitle: 'Finish workout'),
-          CustomFlatButton(labelTitle: 'Cancel workout'),
+          CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {Navigator.pop(context)},),
+          CustomFlatButton(labelTitle: 'Cancel workout', onTap: () => {Navigator.pop(context)},),
           ...cards(cardTitles)
         ],
       ),

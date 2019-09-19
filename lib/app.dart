@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './screens/workout/calendar.dart';
 import './screens/login/login.dart';
 import './screens/more/account_info.dart';
 import './screens/home/tabs_page.dart';
@@ -8,6 +9,7 @@ const LoginRoute = '/';
 const TabsRoute = '/tabs';
 const TrainingRoute = '/training';
 const AccountInfoRoute = '/info';
+const CalendarRoute = '/calendar';
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
           break;
         case AccountInfoRoute:
           screen = AccountInfo();
+          break;
+        case CalendarRoute:
+          screen = CalendarPage(title: 'Calendar test',);
           break;
         default:
           return null;
