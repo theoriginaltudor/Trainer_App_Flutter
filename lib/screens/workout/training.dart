@@ -1,11 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_text_field.dart';
 
-class Training extends StatelessWidget {
-  final String _id;
+class Training extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new _TrainingState();
+  }
+}
 
-  Training(this._id);
+class _TrainingState extends State<Training> {
+  // final String _id;
+  bool _timerRunning = false;
+  String _sTimer = '00:00';
+  int _iTimer = 0;
+
+  // Training(this._id);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +25,15 @@ class Training extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Training'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Training'),
+            CustomFlatButton(labelTitle: this._sTimer, onTap: () => {
+              changeTimerState()
+            },)
+          ]
+        ),
       ),
       body: ListView(
         children: [
@@ -23,6 +43,38 @@ class Training extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void changeTimerState() {
+    if (this._timerRunning) {
+      // stop and reset timer
+      print(this._iTimer);
+      setState(() {
+        _timerRunning = false;
+        _sTimer = '00:00';
+        _iTimer = 0;
+      });
+    } else {
+      // start timer
+      setState(() {
+       _timerRunning = true;
+      });
+      startTimer();
+    }
+  }
+
+  void startTimer() {
+    Timer(Duration(seconds: 1), keepRunning);
+  }
+
+  void keepRunning() {
+    if (this._timerRunning) {
+      startTimer();
+    }
+    setState(() {
+      _sTimer = (this._iTimer ~/ 60).toString().padLeft(2, '0') + ':' + (this._iTimer % 60).toString().padLeft(2, '0');
+      _iTimer = _iTimer + 1;
+    });
   }
 
   List<Widget> cards(List<String> cardTitles) {

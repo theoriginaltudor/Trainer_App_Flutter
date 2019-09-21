@@ -19,7 +19,7 @@ class Workouts extends StatelessWidget {
   }
 
   openTraining(BuildContext context, String sID) {
-    Navigator.pushNamed(context, '/training', arguments: {'id': sID});
+    Navigator.pushNamed(context, '/training'/*, arguments: {'id': sID}*/);
   }
   
   openCalendar(BuildContext context) {
