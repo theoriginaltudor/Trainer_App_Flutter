@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/components/exercise_card.dart';
 import '../../components/custom_flat_button.dart';
-import '../../components/custom_text_field.dart';
 
 class Training extends StatefulWidget {
   @override
@@ -16,12 +16,12 @@ class _TrainingState extends State<Training> {
   bool _timerRunning = false;
   String _sTimer = '00:00';
   int _iTimer = 0;
+  List<String> cardTitles = ['Train1', 'Train2', 'Train3'];
 
   // Training(this._id);
 
   @override
   Widget build(BuildContext context) {
-    final cardTitles = ['Train1', 'Train2', 'Train3'];
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,8 @@ class _TrainingState extends State<Training> {
         children: [
           CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {Navigator.pop(context)},),
           CustomFlatButton(labelTitle: 'Cancel workout', onTap: () => {Navigator.pop(context)},),
-          ...cards(cardTitles)
+          ...cards(this.cardTitles),
+          CustomFlatButton(labelTitle: 'Add exercise', onTap: () => {addExercise()},),
         ],
       ),
     );
@@ -48,7 +49,6 @@ class _TrainingState extends State<Training> {
   void changeTimerState() {
     if (this._timerRunning) {
       // stop and reset timer
-      print(this._iTimer);
       setState(() {
         _timerRunning = false;
         _sTimer = '00:00';
@@ -77,7 +77,13 @@ class _TrainingState extends State<Training> {
     });
   }
 
+  void addExercise() {
+    setState(() {
+      cardTitles.add('Test');
+    });
+  }
+
   List<Widget> cards(List<String> cardTitles) {
-    return cardTitles.map((title) => CustomTextField(labelTitle: title)).toList();
+    return cardTitles.map((title) => ExerciseCard()).toList();
   }
 }

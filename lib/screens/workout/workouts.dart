@@ -26,6 +26,6 @@ class Workouts extends StatelessWidget {
     Navigator.pushNamed(context, '/calendar');
   }
   List<Widget> cards(BuildContext context, List<String> cardIDs) {
-    return cardIDs.map((sID) => CustomCard(onTap: () => openTraining(context, sID))).toList();
+    return cardIDs.map((sID) => CustomCard(heading: sID,onTap: () => openTraining(context, sID))).toList();
   }
 }

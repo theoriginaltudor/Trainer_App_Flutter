@@ -20,10 +20,6 @@ class Login extends StatelessWidget {
         onTap: () => {
           _onLoginTap(context)
         },
-      ),
-      CustomFlatButton(
-        labelTitle: 'Clear',
-        horizontalPadding: 10.0,
       )
     ])));
   }
@@ -31,6 +27,8 @@ class Login extends StatelessWidget {
   _onLoginTap(BuildContext context) {
     Navigator.pushNamed(context, '/tabs');
   }
+
+
 
   List<Widget> textFields(List<String> labelTitles) {
     return labelTitles

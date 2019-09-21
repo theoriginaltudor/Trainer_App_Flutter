@@ -9,6 +9,8 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var exercises = ['Curls','PushUps', 'Deadlift'];
+
     return Card(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 0),
       child: InkWell(
@@ -19,9 +21,20 @@ class CustomCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(10),
           height: 100,
-          child: Text('A card that can be tapped', textAlign: TextAlign.center),
+          child: ListView(
+            children: [
+              Text(this.heading),
+              ...fields(exercises)
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  List<Widget> fields(List<String> exercises) {
+    return exercises
+        .map((exercise) => Text(exercise))
+        .toList();
   }
 }
