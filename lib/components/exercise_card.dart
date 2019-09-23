@@ -17,6 +17,7 @@ class ExerciseCard extends StatefulWidget {
 
 class _ExerciseCardState extends State<ExerciseCard> {
   List<String> history = ['15kg x 20'];
+  List<String> inputData = [''];
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +37,35 @@ class _ExerciseCardState extends State<ExerciseCard> {
 
   void addSet() {
     setState(() {
-     history.add('15kg x 20'); 
+     history.add('15kg x 20');
+     inputData.add('');
+    });
+  }
+
+  void fillPrevious(index) {
+    List<String> values = history[index].split('kg x ');
+    String previous = values.toString().substring(1, values.toString().length - 1);
+    setState(() {
+     inputData[index] = previous;
     });
   }
 
   List<Widget> fields(List<String> history) {
-    return history.map((entry) => Row(
+    return history.asMap().map((index, entry) => MapEntry(index, Row(
       children: <Widget>[
         Expanded(
-          child: CustomFlatButton(labelTitle: entry,)
+          child: CustomFlatButton(labelTitle: entry, onTap: () => {
+            fillPrevious(index)
+          },)
         ),
         Expanded(
-          child: CustomTextField(labelTitle: '',),
+          child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
         ),
         Expanded(
-          child: CustomTextField(labelTitle: '',),
+          child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
         )
         
       ],
-    )).toList();
+    ))).values.toList();
   }
 }
