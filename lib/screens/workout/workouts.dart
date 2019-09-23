@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
+import '../../models/workout.dart';
+import '../../models/request.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_card.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Workouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cardIDs = ['C011', 'A02', 'K444'];
 
     return Scaffold(
-      body: ListView(
-        children: [
-          CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, 'new')),
-          CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context)),
-          ...cards(context, cardIDs)
-        ],
-      ),
+      body: 
+      FutureBuilder(
+        future: fetchWorkouts(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              children: [
+                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, 'new')),
+                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context)),
+                ...cards(context, snapshot.data.data)
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          // By default, show a loading spinner.
+          return CircularProgressIndicator();
+        },
+      ),    
     );
   }
 
@@ -25,7 +41,18 @@ class Workouts extends StatelessWidget {
   openCalendar(BuildContext context) {
     Navigator.pushNamed(context, '/calendar');
   }
-  List<Widget> cards(BuildContext context, List<String> cardIDs) {
-    return cardIDs.map((sID) => CustomCard(heading: sID,onTap: () => openTraining(context, sID))).toList();
+  List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
+    return workoutsList.map((workout) => CustomCard(heading: workout.sId,onTap: () => openTraining(context, workout.sId))).toList();
+  }
+
+  Future<Request> fetchWorkouts() async {
+    final response = await http.get('http://195.249.188.75:2000/api/workouts-for-client/5cd409f31c9d44000033363d');
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return Request.fromJson(jsonDecode(response.body));
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load Workouts');
+    }
   }
 }
