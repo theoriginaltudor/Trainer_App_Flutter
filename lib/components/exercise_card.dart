@@ -3,6 +3,8 @@ import 'package:trainer_app_flutter/components/custom_flat_button.dart';
 import 'package:trainer_app_flutter/components/custom_text_field.dart';
 
 class ExerciseCard extends StatefulWidget {
+  // ar trebui sa primesc aici exercitiul, sId pentru workout si recomandare
+  // ar trebui sa cer history pentru acel exercitiu si acel workout
   final String heading;
   final String body;
   final Function onTap;
@@ -16,6 +18,7 @@ class ExerciseCard extends StatefulWidget {
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
+  // history ar trebui sa fie un fetch
   List<String> history = ['15kg x 20'];
   List<String> inputData = [''];
 

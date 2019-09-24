@@ -5,6 +5,7 @@ import 'package:trainer_app_flutter/components/exercise_card.dart';
 import '../../components/custom_flat_button.dart';
 
 class Training extends StatefulWidget {
+  // ar trebui sa primesc aici un workout
   @override
   State<StatefulWidget> createState() {
     return new _TrainingState();
@@ -16,6 +17,7 @@ class _TrainingState extends State<Training> {
   bool _timerRunning = false;
   String _sTimer = '00:00';
   int _iTimer = 0;
+  // ar trebui sa am lista cu exercitii aici
   List<String> cardTitles = ['Train1', 'Train2', 'Train3'];
 
   // Training(this._id);
@@ -84,6 +86,7 @@ class _TrainingState extends State<Training> {
   }
 
   List<Widget> cards(List<String> cardTitles) {
+    // ar trebui sa dau idul exercitiului cu recomandarea
     return cardTitles.map((title) => ExerciseCard()).toList();
   }
 }
