@@ -1,12 +1,12 @@
 import 'package:trainer_app_flutter/models/workout.dart';
 
-class Request {
+class WorkoutRequest {
   bool success;
   List<Workout> data;
 
-  Request({this.success, this.data});
+  WorkoutRequest({this.success, this.data});
 
-  Request.fromJson(Map<String, dynamic> json) {
+  WorkoutRequest.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<Workout>();
