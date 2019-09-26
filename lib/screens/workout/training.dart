@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
+import 'package:trainer_app_flutter/models/workout.dart';
 import '../../components/custom_flat_button.dart';
 
 class Training extends StatefulWidget {
-  // ar trebui sa primesc aici un workout
+  final Workout workout;
+
+  Training(this.workout);
+
   @override
   State<StatefulWidget> createState() {
     return new _TrainingState();
@@ -13,14 +17,9 @@ class Training extends StatefulWidget {
 }
 
 class _TrainingState extends State<Training> {
-  // final String _id;
   bool _timerRunning = false;
   String _sTimer = '00:00';
   int _iTimer = 0;
-  // ar trebui sa am lista cu exercitii aici
-  List<String> cardTitles = ['Train1', 'Train2', 'Train3'];
-
-  // Training(this._id);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class _TrainingState extends State<Training> {
         children: [
           CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {Navigator.pop(context)},),
           CustomFlatButton(labelTitle: 'Cancel workout', onTap: () => {Navigator.pop(context)},),
-          ...cards(this.cardTitles),
+          ...cards(widget.workout.exerciseList, widget.workout.recomendationsList),
           CustomFlatButton(labelTitle: 'Add exercise', onTap: () => {addExercise()},),
         ],
       ),
@@ -81,12 +80,12 @@ class _TrainingState extends State<Training> {
 
   void addExercise() {
     setState(() {
-      cardTitles.add('Test');
+      widget.workout.exerciseList.add('5cd9261e1c9d4400001be3f7');
+      widget.workout.recomendationsList.add('value');
     });
   }
 
-  List<Widget> cards(List<String> cardTitles) {
-    // ar trebui sa dau idul exercitiului cu recomandarea
-    return cardTitles.map((title) => ExerciseCard()).toList();
+  List<Widget> cards(List<String> exerciseIds, List<String> recomendations) {
+    return exerciseIds.asMap().map((index, id) => MapEntry(index, ExerciseCard(workoutId: widget.workout.sId ,exerciseId: id,recomendation: recomendations[index]))).values.toList();
   }
 }

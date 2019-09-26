@@ -18,13 +18,13 @@ class Workouts extends StatelessWidget {
           if (snapshot.hasData) {
             return ListView(
               children: [
-                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, 'new')),
+                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, new Workout())),
                 CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context)),
                 ...cards(context, snapshot.data.data)
               ],
             );
           } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+            return Text('${snapshot.error}');
           }
 
           // By default, show a loading spinner.
@@ -34,15 +34,15 @@ class Workouts extends StatelessWidget {
     );
   }
 
-  openTraining(BuildContext context, String sID) {
-    Navigator.pushNamed(context, '/training'/*, arguments: {'id': sID}*/);
+  openTraining(BuildContext context, Workout workout) {
+    Navigator.pushNamed(context, '/training', arguments: {'workout': workout});
   }
   
   openCalendar(BuildContext context) {
     Navigator.pushNamed(context, '/calendar');
   }
   List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
-    return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout.sId))).toList();
+    return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout))).toList();
   }
 
   Future<WorkoutRequest> fetchWorkouts() async {

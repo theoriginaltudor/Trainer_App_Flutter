@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/components/custom_flat_button.dart';
-import 'package:trainer_app_flutter/components/custom_text_field.dart';
+import '../components/custom_flat_button.dart';
+import '../components/custom_text_field.dart';
+import '../models/history.dart';
+import '../models/history_request.dart';
+
 
 class ExerciseCard extends StatefulWidget {
-  // ar trebui sa primesc aici exercitiul, sId pentru workout si recomandare
-  // ar trebui sa cer history pentru acel exercitiu si acel workout
-  final String heading;
-  final String body;
-  final Function onTap;
+  final String workoutId;
+  final String exerciseId;
+  final String recomendation;
 
-  ExerciseCard({this.heading, this.body, this.onTap});
+  ExerciseCard({this.workoutId, this.exerciseId, this.recomendation});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,45 +20,61 @@ class ExerciseCard extends StatefulWidget {
 
 class _ExerciseCardState extends State<ExerciseCard> {
   // history ar trebui sa fie un fetch
-  List<String> history = ['15kg x 20'];
-  List<String> inputData = [''];
+  List<History> history;
+  List<String> inputData = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _populateHistoryList();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-      child: Column(
+      child: this.history == null ? CircularProgressIndicator() : Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('PushUps', textAlign: TextAlign.center,),
-          Text('2x10-20RIR2'),
+          Text('PushUps', textAlign: TextAlign.center),
+          Text(this.widget.recomendation),
           ...fields(this.history),
-          CustomFlatButton(labelTitle: 'Add set',onTap: () => {addSet()},)
+          CustomFlatButton(labelTitle: 'Add set',onTap: () => {addSet()})
         ],
       ),
     );
   }
 
-  void addSet() {
+  void _populateHistoryList() async {
+    var response = await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId);
+    // print(response.data.toString());
     setState(() {
-     history.add('15kg x 20');
-     inputData.add('');
+      history = response.data;
+      for (var item in response.data) {
+        inputData.add('');
+      }
     });
   }
 
+  void addSet() {
+    // setState(() {
+    //  history.add('15kg x 20');
+    //  inputData.add('');
+    // });
+  }
+
   void fillPrevious(index) {
-    List<String> values = history[index].split('kg x ');
-    String previous = values.toString().substring(1, values.toString().length - 1);
+    String previous = history[index].kg.numberDecimal + history[index].repetitions.toString();
     setState(() {
      inputData[index] = previous;
     });
   }
 
-  List<Widget> fields(List<String> history) {
+  List<Widget> fields(List<History> history) {
+    print('printing history' + history.first.toString());
     return history.asMap().map((index, entry) => MapEntry(index, Row(
       children: <Widget>[
         Expanded(
-          child: CustomFlatButton(labelTitle: entry, onTap: () => {
+          child: CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
             fillPrevious(index)
           },)
         ),

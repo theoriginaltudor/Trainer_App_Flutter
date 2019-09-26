@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           screen = TabsPage();
           break;
         case TrainingRoute:
-          screen = Training();
+          screen = Training(arguments['workout']);
           break;
         case AccountInfoRoute:
           screen = AccountInfo();
