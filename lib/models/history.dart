@@ -51,12 +51,12 @@ class Kg {
   Kg({this.numberDecimal});
 
   Kg.fromJson(Map<String, dynamic> json) {
-    numberDecimal = json['$numberDecimal'];
+    numberDecimal = json['\$numberDecimal'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['$numberDecimal'] = this.numberDecimal;
+    data['\$numberDecimal'] = this.numberDecimal;
     return data;
   }
 }

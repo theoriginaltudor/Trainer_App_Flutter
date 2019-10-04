@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/exercise_request.dart';
 import '../components/custom_flat_button.dart';
 import '../components/custom_text_field.dart';
 import '../models/history.dart';
@@ -19,9 +20,9 @@ class ExerciseCard extends StatefulWidget {
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
-  // history ar trebui sa fie un fetch
   List<History> history;
   List<String> inputData = [];
+  String exerciseName;
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
       child: this.history == null ? CircularProgressIndicator() : Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('PushUps', textAlign: TextAlign.center),
+          Text(this.exerciseName, textAlign: TextAlign.center),
           Text(this.widget.recomendation),
           ...fields(this.history),
           CustomFlatButton(labelTitle: 'Add set',onTap: () => {addSet()})
@@ -45,21 +46,22 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   void _populateHistoryList() async {
-    var response = await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId);
-    // print(response.data.toString());
+    var historyResponse = await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId);
+    var exerciseResponse = await ExerciseRequest.fetchExercise(widget.exerciseId);
     setState(() {
-      history = response.data;
-      for (var item in response.data) {
+      exerciseName = exerciseResponse.data.first.name;
+      history = historyResponse.data;
+      for (var item in historyResponse.data) {
         inputData.add('');
       }
     });
   }
 
   void addSet() {
-    // setState(() {
-    //  history.add('15kg x 20');
-    //  inputData.add('');
-    // });
+    setState(() {
+     history.add(new History());
+     inputData.add('');
+    });
   }
 
   void fillPrevious(index) {
@@ -70,22 +72,25 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   List<Widget> fields(List<History> history) {
-    print('printing history' + history.first.toString());
-    return history.asMap().map((index, entry) => MapEntry(index, Row(
-      children: <Widget>[
-        Expanded(
-          child: CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
-            fillPrevious(index)
-          },)
-        ),
-        Expanded(
-          child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
-        ),
-        Expanded(
-          child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
-        )
-        
-      ],
-    ))).values.toList();
+    if (history.isEmpty) {
+      addSet();
+    } else {
+      return history.asMap().map((index, entry) => MapEntry(index, Row(
+        children: <Widget>[
+          Expanded(
+            child: CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
+              fillPrevious(index)
+            },)
+          ),
+          Expanded(
+            child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
+          ),
+          Expanded(
+            child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
+          )
+          
+        ],
+      ))).values.toList();
+    }
   }
 }
