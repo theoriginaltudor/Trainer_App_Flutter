@@ -1,6 +1,7 @@
 import 'package:trainer_app_flutter/models/exercise.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../variables.dart' as global;
 
 class ExerciseRequest {
   bool success;
@@ -35,7 +36,7 @@ class ExerciseRequest {
     Map<String, String> headers = {'Content-type': 'application/json'};
     var body = listToJson(exerciseList);
     // print(body);
-    final response = await http.post('http://195.249.188.75:2000/api/exercise-list/', headers: headers, body: body);
+    final response = await http.post('http://${global.serverIp}:2000/api/exercise-list/', headers: headers, body: body);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return ExerciseRequest.fromJson(jsonDecode(response.body));
@@ -46,7 +47,7 @@ class ExerciseRequest {
   }
 
   static Future<ExerciseRequest> fetchExercise(String exerciseId) async {
-    final response = await http.get('http://195.249.188.75:2000/api/exercise/$exerciseId');
+    final response = await http.get('http://${global.serverIp}:2000/api/exercise/$exerciseId');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return ExerciseRequest.fromJson(jsonDecode(response.body));

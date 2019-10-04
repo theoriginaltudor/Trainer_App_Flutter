@@ -1,6 +1,7 @@
 import 'package:trainer_app_flutter/models/history.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../variables.dart' as global;
 
 class HistoryRequest {
   bool success;
@@ -28,7 +29,7 @@ class HistoryRequest {
   }
 
   static Future<HistoryRequest> fetchHistory(String exerciseId, String workoutId) async {
-    final response = await http.get('http://195.249.188.75:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
+    final response = await http.get('http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return HistoryRequest.fromJson(jsonDecode(response.body));

@@ -5,6 +5,7 @@ import '../../components/custom_flat_button.dart';
 import '../../components/custom_card.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../../variables.dart' as global;
 
 class Workouts extends StatelessWidget {
   @override
@@ -46,7 +47,7 @@ class Workouts extends StatelessWidget {
   }
 
   Future<WorkoutRequest> fetchWorkouts() async {
-    final response = await http.get('http://195.249.188.75:2000/api/workouts-for-client/5cd409f31c9d44000033363d');
+    final response = await http.get('http://${global.serverIp}:2000/api/workouts-for-client/5cd409f31c9d44000033363d');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return WorkoutRequest.fromJson(jsonDecode(response.body));

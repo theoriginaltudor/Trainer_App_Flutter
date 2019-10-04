@@ -59,7 +59,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
 
   void addSet() {
     setState(() {
-     history.add(new History());
+     history.add(new History(kg: new Kg()));
      inputData.add('');
     });
   }
@@ -73,12 +73,18 @@ class _ExerciseCardState extends State<ExerciseCard> {
 
   List<Widget> fields(List<History> history) {
     if (history.isEmpty) {
-      addSet();
+      WidgetsBinding.instance
+        .addPostFrameCallback((_) => addSet());
+      return [
+        CircularProgressIndicator()
+      ];
     } else {
       return history.asMap().map((index, entry) => MapEntry(index, Row(
         children: <Widget>[
           Expanded(
-            child: CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
+            child: entry.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
+              print('No data')
+            },) : CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
               fillPrevious(index)
             },)
           ),
