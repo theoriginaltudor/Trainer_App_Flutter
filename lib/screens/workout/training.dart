@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/components/all_exercises.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
 import '../../components/custom_flat_button.dart';
@@ -78,10 +79,16 @@ class _TrainingState extends State<Training> {
     });
   }
 
-  void addExercise() {
-    setState(() {
-      widget.workout.exerciseList.add('5cd9261e1c9d4400001be3f7');
-      widget.workout.recomendationsList.add('value');
+  void addExercise() async {
+    await showDialog(context: context, builder: (BuildContext context) {
+      return AllExercises();
+    }).then((response) => {
+      setState(() {
+        widget.workout.exerciseList.addAll(response);
+        for (var item in response) {
+          widget.workout.recomendationsList.add('Not defined');
+        }
+      })
     });
   }
 

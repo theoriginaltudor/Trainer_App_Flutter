@@ -32,6 +32,17 @@ class ExerciseRequest {
     return data;
   }
 
+  static Future<ExerciseRequest> fetchAllExercises() async {
+    final response = await http.get('http://${global.serverIp}:2000/api/exercises/');
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return ExerciseRequest.fromJson(jsonDecode(response.body));
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception(response.body);
+    }
+  }
+
   static Future<ExerciseRequest> fetchExercises(List<String> exerciseList) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     var body = listToJson(exerciseList);
