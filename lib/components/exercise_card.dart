@@ -61,6 +61,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   List<List<History>> processHistoryList(List<History> list) {
+    print('should process the list ' + list.toString());
     if (list.length == 0) {
       return null;
     }
@@ -79,15 +80,20 @@ class _ExerciseCardState extends State<ExerciseCard> {
       }
       newList.add(tempList);
     }
-
+    print(newList);
     return newList;
   }
 
   void addSet() {
+    print('should add set');
     setState(() {
      history.add(new History(kg: new Kg()));
      inputData.add('');
-     historyByDate = processHistoryList(this.history);
+     if (historyByDate == null) {
+       historyByDate = [[history.last]];
+     } else {
+       historyByDate.add([history.last]);
+     }
     });
   }
 
@@ -99,6 +105,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   List<Widget> fields(List<List<History>> history) {
+    print('list of lists of history is '+ history.toString());
     if (history == null) {
       WidgetsBinding.instance
         .addPostFrameCallback((_) => addSet());
@@ -113,7 +120,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
               print('No data')
             },) : CarouselSlider(
               height: 150.0,
-              items: carouselItems(entry, index)
+              items: carouselItems(entry, index),
+              enableInfiniteScroll: false
             )
           ),
           Expanded(
@@ -129,6 +137,9 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   List<Widget> carouselItems(List<History> entry, int index) {
-    return entry.map((i) => CustomFlatButton(labelTitle:(entry.first.kg.numberDecimal + 'kg x' + entry.first.repetitions.toString()), onTap: () => {fillPrevious(index)},)).toList();
+    print(entry);
+    List<Widget> itemList = entry.map((i) => CustomFlatButton(labelTitle:(entry.first.kg.numberDecimal + 'kg x' + entry.first.repetitions.toString()), onTap: () => {fillPrevious(index)},)).toList();
+    print(itemList);
+    return itemList;
   }
 }
