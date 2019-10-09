@@ -4,6 +4,7 @@ import '../components/custom_flat_button.dart';
 import '../components/custom_text_field.dart';
 import '../models/history.dart';
 import '../models/history_request.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 
 class ExerciseCard extends StatefulWidget {
@@ -23,11 +24,12 @@ class _ExerciseCardState extends State<ExerciseCard> {
   List<History> history;
   List<String> inputData = [];
   String exerciseName;
+  List<List<History>> historyByDate;
 
   @override
   void initState() {
     super.initState();
-    _populateHistoryList();
+    populateHistoryList();
   }
   @override
   Widget build(BuildContext context) {
@@ -38,14 +40,14 @@ class _ExerciseCardState extends State<ExerciseCard> {
         children: [
           Text(this.exerciseName, textAlign: TextAlign.center),
           Text(this.widget.recomendation),
-          ...fields(this.history),
+          ...fields(this.historyByDate),
           CustomFlatButton(labelTitle: 'Add set',onTap: () => {addSet()})
         ],
       ),
     );
   }
 
-  void _populateHistoryList() async {
+  void populateHistoryList() async {
     var historyResponse = await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId);
     var exerciseResponse = await ExerciseRequest.fetchExercise(widget.exerciseId);
     setState(() {
@@ -54,13 +56,38 @@ class _ExerciseCardState extends State<ExerciseCard> {
       for (var item in historyResponse.data) {
         inputData.add('');
       }
+      historyByDate = processHistoryList(historyResponse.data);
     });
+  }
+
+  List<List<History>> processHistoryList(List<History> list) {
+    if (list.length == 0) {
+      return null;
+    }
+    List<List<History>> newList = [];
+    List<String> dates = [];
+    for (var item in list) {
+      dates.add(item.date);
+    }
+    List<String> distinctDates = dates.toSet().toList();
+    for (var item in distinctDates) {
+      List<History> tempList = [];
+      for (var entry in list) {
+        if (item == entry.date) {
+          tempList.add(entry);
+        }
+      }
+      newList.add(tempList);
+    }
+
+    return newList;
   }
 
   void addSet() {
     setState(() {
      history.add(new History(kg: new Kg()));
      inputData.add('');
+     historyByDate = processHistoryList(this.history);
     });
   }
 
@@ -71,8 +98,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
     });
   }
 
-  List<Widget> fields(List<History> history) {
-    if (history.isEmpty) {
+  List<Widget> fields(List<List<History>> history) {
+    if (history == null) {
       WidgetsBinding.instance
         .addPostFrameCallback((_) => addSet());
       return [
@@ -82,11 +109,12 @@ class _ExerciseCardState extends State<ExerciseCard> {
       return history.asMap().map((index, entry) => MapEntry(index, Row(
         children: <Widget>[
           Expanded(
-            child: entry.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
+            child: entry.first.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
               print('No data')
-            },) : CustomFlatButton(labelTitle:(entry.kg.numberDecimal + 'kg x' + entry.repetitions.toString()), onTap: () => {
-              fillPrevious(index)
-            },)
+            },) : CarouselSlider(
+              height: 150.0,
+              items: carouselItems(entry, index)
+            )
           ),
           Expanded(
             child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
@@ -98,5 +126,9 @@ class _ExerciseCardState extends State<ExerciseCard> {
         ],
       ))).values.toList();
     }
+  }
+
+  List<Widget> carouselItems(List<History> entry, int index) {
+    return entry.map((i) => CustomFlatButton(labelTitle:(entry.first.kg.numberDecimal + 'kg x' + entry.first.repetitions.toString()), onTap: () => {fillPrevious(index)},)).toList();
   }
 }
