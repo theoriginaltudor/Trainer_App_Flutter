@@ -36,7 +36,6 @@ class _AllExercisesState extends State<AllExercises> {
 
   void populateExerciseList() async {
     var exerciseResponse = await ExerciseRequest.fetchAllExercises();
-    print('got response' + exerciseResponse.toString());
     setState(() {
      allExercises = exerciseResponse.data;
     });

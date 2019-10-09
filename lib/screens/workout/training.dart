@@ -84,7 +84,12 @@ class _TrainingState extends State<Training> {
       return AllExercises();
     }).then((response) => {
       setState(() {
-        widget.workout.exerciseList.addAll(response);
+        if (widget.workout.exerciseList == null) {
+          widget.workout.exerciseList = response;
+          widget.workout.recomendationsList = [];
+        } else {
+          widget.workout.exerciseList.addAll(response);
+        }
         for (var item in response) {
           widget.workout.recomendationsList.add('Not defined');
         }
@@ -93,6 +98,9 @@ class _TrainingState extends State<Training> {
   }
 
   List<Widget> cards(List<String> exerciseIds, List<String> recomendations) {
+    if (exerciseIds == null) {
+      return <Widget>[];
+    }
     return exerciseIds.asMap().map((index, id) => MapEntry(index, ExerciseCard(workoutId: widget.workout.sId ,exerciseId: id,recomendation: recomendations[index]))).values.toList();
   }
 }

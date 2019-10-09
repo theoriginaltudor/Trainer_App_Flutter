@@ -48,15 +48,20 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   void populateHistoryList() async {
-    var historyResponse = await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId);
-    var exerciseResponse = await ExerciseRequest.fetchExercise(widget.exerciseId);
+    var historyResponse;
+    if (widget.workoutId == null) {
+      historyResponse = <History>[];
+    } else {
+      historyResponse = (await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId)).data;
+    }
+    var exerciseResponse = (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {
-      exerciseName = exerciseResponse.data.first.name;
-      history = historyResponse.data;
-      for (var item in historyResponse.data) {
+      exerciseName = exerciseResponse.first.name;
+      history = historyResponse;
+      for (var item in historyResponse) {
         inputData.add('');
       }
-      historyByDate = processHistoryList(historyResponse.data);
+      historyByDate = processHistoryList(historyResponse);
     });
   }
 
