@@ -104,35 +104,49 @@ class _ExerciseCardState extends State<ExerciseCard> {
     });
   }
 
-  List<Widget> fields(List<List<History>> history) {
-    print('list of lists of history is '+ history.toString());
-    if (history == null) {
+  List<Widget> fields(List<List<History>> historyLists) {
+    print('list of lists of history is '+ historyLists.toString());
+    if (historyLists == null) {
       WidgetsBinding.instance
         .addPostFrameCallback((_) => addSet());
       return [
         CircularProgressIndicator()
       ];
     } else {
-      return history.asMap().map((index, entry) => MapEntry(index, Row(
-        children: <Widget>[
-          Expanded(
-            child: entry.first.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
-              print('No data')
-            },) : CarouselSlider(
-              height: 150.0,
-              items: carouselItems(entry, index),
-              enableInfiniteScroll: false
+      return historyLists.asMap().map((index, entry) => MapEntry(index,
+      Dismissible(
+        background: Container(color: Colors.red),
+        key: Key(entry.hashCode.toString()),
+        onDismissed: (direction) {
+          setState(() {
+            historyByDate.remove(entry);
+            for (var item in entry) {
+              history.remove(item);
+            }
+          });
+
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text("Dismissed")));
+        },
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: entry.first.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
+                print('No data')
+              },) : CarouselSlider(
+                height: 150.0,
+                items: carouselItems(entry, index),
+                enableInfiniteScroll: false
+              )
+            ),
+            Expanded(
+              child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
+            ),
+            Expanded(
+              child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
             )
-          ),
-          Expanded(
-            child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
-          ),
-          Expanded(
-            child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
-          )
-          
-        ],
-      ))).values.toList();
+            
+          ],
+      )))).values.toList();
     }
   }
 
