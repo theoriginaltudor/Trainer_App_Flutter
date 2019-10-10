@@ -28,8 +28,19 @@ class HistoryRequest {
     return data;
   }
 
-  static Future<HistoryRequest> fetchHistory(String exerciseId, String workoutId) async {
+  static Future<HistoryRequest> fetchHistoryExercise(String exerciseId, String workoutId) async {
     final response = await http.get('http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return HistoryRequest.fromJson(jsonDecode(response.body));
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception(response.body);
+    }
+  }
+
+  static Future<HistoryRequest> fetchHistoryWorkout(String workoutId) async {
+    final response = await http.get('http://${global.serverIp}:2000/api/history-for-client/5cd409f31c9d44000033363d/for-workout/$workoutId');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return HistoryRequest.fromJson(jsonDecode(response.body));

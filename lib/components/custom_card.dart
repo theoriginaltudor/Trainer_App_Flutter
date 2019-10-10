@@ -46,8 +46,13 @@ class CustomCard extends StatelessWidget {
   }
 
   List<Widget> fields(List<Exercise> exercises) {
-    return exercises.asMap()
+    try {
+      return exercises.asMap()
         .map((index, exercise) => MapEntry(index, Text(exercise.name + ' ' + workout.recomendationsList[index]))).
         values.toList();
+    } catch (e) {
+      print(e);
+      return <Widget>[];
+    }
   }
 }

@@ -20,7 +20,7 @@ class Workouts extends StatelessWidget {
             return ListView(
               children: [
                 CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, new Workout())),
-                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context)),
+                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context, snapshot.data.data)),
                 ...cards(context, snapshot.data.data)
               ],
             );
@@ -39,9 +39,10 @@ class Workouts extends StatelessWidget {
     Navigator.pushNamed(context, '/training', arguments: {'workout': workout});
   }
   
-  openCalendar(BuildContext context) {
-    Navigator.pushNamed(context, '/calendar');
+  openCalendar(BuildContext context, List<Workout> workouts) {
+    Navigator.pushNamed(context, '/calendar', arguments: {'workouts': workouts});
   }
+
   List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
     return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout))).toList();
   }

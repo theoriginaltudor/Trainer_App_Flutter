@@ -52,7 +52,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
     if (widget.workoutId == null) {
       historyResponse = <History>[];
     } else {
-      historyResponse = (await HistoryRequest.fetchHistory(widget.exerciseId, widget.workoutId)).data;
+      historyResponse = (await HistoryRequest.fetchHistoryExercise(widget.exerciseId, widget.workoutId)).data;
     }
     var exerciseResponse = (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {

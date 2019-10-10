@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           screen = AccountInfo();
           break;
         case CalendarRoute:
-          screen = CalendarPage(title: 'Calendar test',);
+          screen = CalendarPage(arguments['workouts']);
           break;
         default:
           return null;
