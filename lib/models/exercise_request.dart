@@ -45,8 +45,7 @@ class ExerciseRequest {
 
   static Future<ExerciseRequest> fetchExercises(List<String> exerciseList) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
-    var body = listToJson(exerciseList);
-    // print(body);
+    String body = jsonEncode(exerciseList);
     final response = await http.post('http://${global.serverIp}:2000/api/exercise-list/', headers: headers, body: body);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -66,14 +65,5 @@ class ExerciseRequest {
       // If that response was not OK, throw an error.
       throw Exception(response.body);
     }
-  }
-
-  static String listToJson (List<String> list) {
-    String sList = '[';
-    for (var i = 0; i < list.length-1; i++) {
-      sList = sList + '"' + list[i] + '",';
-    }
-    sList += '"' + list.last + '"' + ']';
-    return sList;
   }
 }

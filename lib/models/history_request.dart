@@ -13,9 +13,14 @@ class HistoryRequest {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<History>();
-      json['data'].forEach((v) {
-        data.add(new History.fromJson(v));
-      });
+      try {
+        json['data'].forEach((v) {
+          data.add(new History.fromJson(v));
+        });
+      } catch (e) {
+        data.add(new History.fromJson(json['data']));
+      }
+      
     }
   }
 
@@ -52,11 +57,12 @@ class HistoryRequest {
 
   static Future<HistoryRequest> postHistoryEntry(String workoutId, String exerciseId, History entry) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
-    var body = entry.toJson();
+    String body = jsonEncode(entry.toJson());
     print(body);
     final response = await http.post('http://${global.serverIp}:2000/api/new-history-entry/5cd409f31c9d44000033363d/$workoutId/$exerciseId', headers: headers, body: body);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
+      print(response.body);
       return HistoryRequest.fromJson(jsonDecode(response.body));
     } else {
       // If that response was not OK, throw an error.

@@ -7,6 +7,7 @@ class History {
   String exerciseId;
   String workoutId;
   String clientId;
+  int setNo;
 
   History(
       {this.sId,
@@ -16,7 +17,8 @@ class History {
       this.date,
       this.exerciseId,
       this.workoutId,
-      this.clientId});
+      this.clientId,
+      this.setNo});
 
   History.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -27,6 +29,7 @@ class History {
     exerciseId = json['exerciseId'];
     workoutId = json['workoutId'];
     clientId = json['clientId'];
+    setNo = json['setNo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -38,6 +41,7 @@ class History {
     data['repetitions'] = this.repetitions;
     data['repetitionsInReserve'] = this.repetitionsInReserve;
     data['date'] = this.date;
+    data['setNo'] = this.setNo;
     // data['exerciseId'] = this.exerciseId;
     // data['workoutId'] = this.workoutId;
     // data['clientId'] = this.clientId;

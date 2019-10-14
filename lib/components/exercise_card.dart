@@ -63,11 +63,9 @@ class _ExerciseCardState extends State<ExerciseCard> {
 
   void saveHistoryEntry() {
     DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime today = DateTime(now.year, now.month, now.day, 2);
     
     for (var i = 0; i < this.kgInputData.length; i++) {
-      // var exId = widget.exerciseId;
-      // print('$i for id $exId');
       HistoryRequest.postHistoryEntry(widget.workoutId, widget.exerciseId, new History(
         kg: new Kg(numberDecimal: this.kgInputData[i].text),
         repetitions: int.tryParse(this.repsInputData[i].text),
@@ -90,11 +88,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
     setState(() {
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
-      for (var item in historyResponse) {
-        kgInputData.add(TextEditingController());
-        repsInputData.add(TextEditingController());
-      }
       historyByDate = processHistoryList(historyResponse);
+      if (historyByDate != null) {
+        for (var item in historyByDate) {
+          kgInputData.add(TextEditingController());
+          repsInputData.add(TextEditingController());
+        }
+      }
     });
   }
 
@@ -103,20 +103,21 @@ class _ExerciseCardState extends State<ExerciseCard> {
       return null;
     }
     List<List<History>> newList = [];
-    List<String> dates = [];
+    List<int> sets = [];
     for (var item in list) {
-      dates.add(item.date);
+      sets.add(item.setNo);
     }
-    List<String> distinctDates = dates.toSet().toList();
-    for (var item in distinctDates) {
+    List<int> distinctSets = sets.toSet().toList();
+    for (var item in distinctSets) {
       List<History> tempList = [];
       for (var entry in list) {
-        if (item == entry.date) {
+        if (item == entry.setNo) {
           tempList.add(entry);
         }
       }
       newList.add(tempList);
     }
+    print('processed list ' + newList.toString());
     return newList;
   }
 
@@ -133,9 +134,11 @@ class _ExerciseCardState extends State<ExerciseCard> {
     });
   }
 
-  void fillPrevious(index) {
-    kgInputData[index].text = history[index].kg.numberDecimal;
-    repsInputData[index].text = history[index].repetitions.toString();
+  void fillPrevious(int index, History item) {
+    setState(() {
+      kgInputData[index].text = item.kg.numberDecimal;
+      repsInputData[index].text = item.repetitions.toString();
+    });
   }
 
   List<Widget> fields(List<List<History>> historyLists) {
@@ -156,6 +159,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
             for (var item in entry) {
               history.remove(item);
             }
+            kgInputData.removeAt(index);
+            repsInputData.removeAt(index);
           });
 
           Scaffold.of(context).showSnackBar(SnackBar(content: Text('Dismissed')));
@@ -163,10 +168,10 @@ class _ExerciseCardState extends State<ExerciseCard> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: entry.first.sId == null ? CustomFlatButton(labelTitle: 'No history',onTap: ()=> {
+              child: entry.first.sId == null ? CustomFlatButton(labelTitle: 'No history', horizontalPadding: 0.0, onTap: ()=> {
                 print('No data')
               },) : CarouselSlider(
-                height: 150.0,
+                height: 60.0,
                 items: carouselItems(entry, index),
                 enableInfiniteScroll: false
               )
@@ -184,7 +189,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   List<Widget> carouselItems(List<History> entry, int index) {
-    List<Widget> itemList = entry.map((i) => CustomFlatButton(labelTitle:(entry.first.kg.numberDecimal + 'kg x' + entry.first.repetitions.toString()), onTap: () => {fillPrevious(index)},)).toList();
+    List<Widget> itemList = entry.map((item) => CustomFlatButton(labelTitle:(item.kg.numberDecimal + 'kg x' + item.repetitions.toString()), horizontalPadding: 0.0, onTap: () => {fillPrevious(index, item)},)).toList();
     return itemList;
   }
 }
