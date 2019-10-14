@@ -5,10 +5,10 @@ import '../../components/custom_flat_button.dart';
 import '../../variables.dart' as global;
 
 class Login extends StatelessWidget {
+  final List<TextEditingController> controllers = [new TextEditingController(), new TextEditingController()];
   @override
   Widget build(BuildContext context) {
     final List<String> labelTitles = ['Email', 'Password'];
-    final List<TextEditingController> controllers = [new TextEditingController(), new TextEditingController()];
     return Scaffold(
         body: Center(
           child: 

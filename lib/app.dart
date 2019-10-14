@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       Widget screen;
       switch (settings.name) {
         case LoginRoute:
-          screen = Login();
+          screen = Scaffold(body: Login());
           break;
         case TabsRoute:
           screen = TabsPage();
