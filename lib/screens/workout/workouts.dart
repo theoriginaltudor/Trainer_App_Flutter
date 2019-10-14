@@ -3,9 +3,6 @@ import '../../models/workout.dart';
 import '../../models/workout_request.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_card.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../variables.dart' as global;
 
 class Workouts extends StatelessWidget {
   @override
@@ -14,7 +11,7 @@ class Workouts extends StatelessWidget {
     return Scaffold(
       body: 
       FutureBuilder(
-        future: fetchWorkouts(),
+        future: WorkoutRequest.fetchWorkouts(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView(
@@ -45,16 +42,5 @@ class Workouts extends StatelessWidget {
 
   List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
     return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout))).toList();
-  }
-
-  Future<WorkoutRequest> fetchWorkouts() async {
-    final response = await http.get('http://${global.serverIp}:2000/api/workouts-for-client/5cd409f31c9d44000033363d');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return WorkoutRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load Workouts');
-    }
   }
 }

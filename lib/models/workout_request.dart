@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../variables.dart' as global;
 import 'package:trainer_app_flutter/models/workout.dart';
 
 class WorkoutRequest {
@@ -23,5 +26,16 @@ class WorkoutRequest {
       data['data'] = this.data.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  static Future<WorkoutRequest> fetchWorkouts() async {
+    final response = await http.get('http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return WorkoutRequest.fromJson(jsonDecode(response.body));
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load Workouts');
+    }
   }
 }
