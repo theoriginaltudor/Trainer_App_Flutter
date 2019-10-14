@@ -11,18 +11,21 @@ class ExerciseCard extends StatefulWidget {
   final String workoutId;
   final String exerciseId;
   final String recomendation;
-
+  final state = _ExerciseCardState();
   ExerciseCard({this.workoutId, this.exerciseId, this.recomendation});
 
   @override
   State<StatefulWidget> createState() {
-    return new _ExerciseCardState();
+    return state;
   }
+
+  void saveData() => state.saveHistoryEntry();
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
   List<History> history;
-  List<String> inputData = [];
+  List<TextEditingController> kgInputData = [];
+  List<TextEditingController> repsInputData = [];
   String exerciseName;
   List<List<History>> historyByDate;
 
@@ -47,6 +50,35 @@ class _ExerciseCardState extends State<ExerciseCard> {
     );
   }
 
+  void dispose() {
+    
+    for (var controller in this.kgInputData) {
+      controller.dispose();
+    }
+    for (var controller in this.repsInputData) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void saveHistoryEntry() {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    
+    for (var i = 0; i < this.kgInputData.length; i++) {
+      // var exId = widget.exerciseId;
+      // print('$i for id $exId');
+      HistoryRequest.postHistoryEntry(widget.workoutId, widget.exerciseId, new History(
+        kg: new Kg(numberDecimal: this.kgInputData[i].text),
+        repetitions: int.tryParse(this.repsInputData[i].text),
+        repetitionsInReserve: 2,
+        date: today.toIso8601String(),
+        exerciseId: widget.exerciseId,
+        workoutId: widget.workoutId
+      ));
+    }
+  }
+
   void populateHistoryList() async {
     var historyResponse;
     if (widget.workoutId == null) {
@@ -59,7 +91,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
       for (var item in historyResponse) {
-        inputData.add('');
+        kgInputData.add(TextEditingController());
+        repsInputData.add(TextEditingController());
       }
       historyByDate = processHistoryList(historyResponse);
     });
@@ -89,21 +122,20 @@ class _ExerciseCardState extends State<ExerciseCard> {
 
   void addSet() {
     setState(() {
-     history.add(new History(kg: new Kg()));
-     inputData.add('');
-     if (historyByDate == null) {
-       historyByDate = [[history.last]];
-     } else {
-       historyByDate.add([history.last]);
-     }
+      history.add(new History(kg: new Kg()));
+      kgInputData.add(TextEditingController());
+      repsInputData.add(TextEditingController());
+      if (historyByDate == null) {
+        historyByDate = [[history.last]];
+      } else {
+        historyByDate.add([history.last]);
+      }
     });
   }
 
   void fillPrevious(index) {
-    String previous = history[index].kg.numberDecimal + history[index].repetitions.toString();
-    setState(() {
-     inputData[index] = previous;
-    });
+    kgInputData[index].text = history[index].kg.numberDecimal;
+    repsInputData[index].text = history[index].repetitions.toString();
   }
 
   List<Widget> fields(List<List<History>> historyLists) {
@@ -126,7 +158,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
             }
           });
 
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text("Dismissed")));
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Dismissed')));
         },
         child: Row(
           children: <Widget>[
@@ -140,10 +172,10 @@ class _ExerciseCardState extends State<ExerciseCard> {
               )
             ),
             Expanded(
-              child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[0]),
+              child: CustomTextField(controller: kgInputData[index]),
             ),
             Expanded(
-              child: CustomTextField(labelTitle: inputData[index].split(',').length == 1 ? '' : inputData[index].split(',')[1]),
+              child: CustomTextField(controller: repsInputData[index]),
             )
             
           ],

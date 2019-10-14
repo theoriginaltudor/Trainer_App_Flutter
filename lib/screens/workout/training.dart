@@ -21,6 +21,7 @@ class _TrainingState extends State<Training> {
   bool _timerRunning = false;
   String _sTimer = '00:00';
   int _iTimer = 0;
+  List<ExerciseCard> cardsList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +40,20 @@ class _TrainingState extends State<Training> {
       ),
       body: ListView(
         children: [
-          CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {Navigator.pop(context)},),
+          CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {onFinishWorkout()},),
           CustomFlatButton(labelTitle: 'Cancel workout', onTap: () => {Navigator.pop(context)},),
           ...cards(widget.workout.exerciseList, widget.workout.recomendationsList),
           CustomFlatButton(labelTitle: 'Add exercise', onTap: () => {addExercise()},),
         ],
       ),
     );
+  }
+
+  void onFinishWorkout() {
+    for (var card in this.cardsList) {
+      card.saveData();
+    }
+    Navigator.pop(context);
   }
 
   void changeTimerState() {
@@ -97,10 +105,11 @@ class _TrainingState extends State<Training> {
     });
   }
 
-  List<Widget> cards(List<String> exerciseIds, List<String> recomendations) {
+  List<ExerciseCard> cards(List<String> exerciseIds, List<String> recomendations) {
     if (exerciseIds == null) {
-      return <Widget>[];
+      return <ExerciseCard>[];
     }
-    return exerciseIds.asMap().map((index, id) => MapEntry(index, ExerciseCard(workoutId: widget.workout.sId ,exerciseId: id,recomendation: recomendations[index]))).values.toList();
+    this.cardsList = exerciseIds.asMap().map((index, id) => MapEntry(index, ExerciseCard(workoutId: widget.workout.sId ,exerciseId: id,recomendation: recomendations[index]))).values.toList();
+    return this.cardsList;
   }
 }

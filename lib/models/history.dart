@@ -31,16 +31,16 @@ class History {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    // data['_id'] = this.sId;
     if (this.kg != null) {
       data['kg'] = this.kg.toJson();
     }
     data['repetitions'] = this.repetitions;
     data['repetitionsInReserve'] = this.repetitionsInReserve;
     data['date'] = this.date;
-    data['exerciseId'] = this.exerciseId;
-    data['workoutId'] = this.workoutId;
-    data['clientId'] = this.clientId;
+    // data['exerciseId'] = this.exerciseId;
+    // data['workoutId'] = this.workoutId;
+    // data['clientId'] = this.clientId;
     return data;
   }
 }
