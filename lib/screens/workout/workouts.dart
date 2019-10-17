@@ -3,6 +3,7 @@ import '../../models/workout.dart';
 import '../../models/workout_request.dart';
 import '../../components/custom_flat_button.dart';
 import '../../components/custom_card.dart';
+import '../../variables.dart' as global;
 
 class Workouts extends StatelessWidget {
   @override
@@ -14,10 +15,12 @@ class Workouts extends StatelessWidget {
         future: WorkoutRequest.fetchWorkouts(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            List<Workout> workouts = List.from(snapshot.data.data);
+
             return ListView(
               children: [
-                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, new Workout())),
-                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context, snapshot.data.data)),
+                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, new Workout(name: 'New workout', clientId: global.userId))),
+                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context, workouts)),
                 ...cards(context, snapshot.data.data)
               ],
             );
@@ -41,6 +44,12 @@ class Workouts extends StatelessWidget {
   }
 
   List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
+    for (var i = 0; i < workoutsList.length; i++) {
+      if (workoutsList[i].name == 'New workout') {
+        workoutsList.remove(workoutsList[i]);
+        i--;
+      }
+    }
     return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout))).toList();
   }
 }

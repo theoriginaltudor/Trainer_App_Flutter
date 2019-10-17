@@ -13,9 +13,14 @@ class WorkoutRequest {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<Workout>();
-      json['data'].forEach((v) {
-        data.add(new Workout.fromJson(v));
-      });
+      
+      try {
+        json['data'].forEach((v) {
+          data.add(new Workout.fromJson(v));
+        });
+      } catch (e) {
+        data.add(new Workout.fromJson(json['data']));
+      }
     }
   }
 
@@ -36,6 +41,19 @@ class WorkoutRequest {
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load Workouts');
+    }
+  }
+
+  static Future<WorkoutRequest> createWorkout(Workout workout) async {
+    Map<String, String> headers = {'Content-type': 'application/json'};
+    String body = jsonEncode(workout.toJson());
+    final response = await http.post('http://${global.serverIp}:2000/api/create-workout/', headers: headers, body: body);
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return WorkoutRequest.fromJson(jsonDecode(response.body));
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception(response.body);
     }
   }
 }

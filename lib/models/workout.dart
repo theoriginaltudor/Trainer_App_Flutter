@@ -24,7 +24,7 @@ class Workout {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['exerciseList'] = this.exerciseList;
     data['recomendationsList'] = this.recomendationsList;
-    data['_id'] = this.sId;
+    // data['_id'] = this.sId;
     data['name'] = this.name;
     data['clientId'] = this.clientId;
     return data;

@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/components/all_exercises.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
+import 'package:trainer_app_flutter/models/workout_request.dart';
 import '../../components/custom_flat_button.dart';
 
 class Training extends StatefulWidget {
@@ -49,10 +49,20 @@ class _TrainingState extends State<Training> {
     );
   }
 
-  void onFinishWorkout() {
-    for (var card in this.cardsList) {
-      card.saveData();
+  Future onFinishWorkout() async {
+    if (widget.workout.name == 'New workout') {
+      WorkoutRequest.createWorkout(widget.workout).then(((response) => {
+        // print(jsonEncode(response.toJson()))
+        for (var card in this.cardsList) {
+          card.saveData(workoutId: response.data.first.sId)
+        }
+      }));
+    } else {
+      for (var card in this.cardsList) {
+        card.saveData();
+      }
     }
+    
     Navigator.pop(context);
   }
 

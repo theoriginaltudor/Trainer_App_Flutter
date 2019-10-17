@@ -19,7 +19,7 @@ class ExerciseCard extends StatefulWidget {
     return state;
   }
 
-  void saveData() => state.saveHistoryEntry();
+  void saveData({String workoutId = ''}) => state.saveHistoryEntry(workoutId);
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
@@ -27,7 +27,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   List<TextEditingController> kgInputData = [];
   List<TextEditingController> repsInputData = [];
   String exerciseName;
-  List<List<History>> historyByDate;
+  List<List<History>> historyBySet;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
         children: [
           Text(this.exerciseName, textAlign: TextAlign.center),
           Text(this.widget.recomendation),
-          ...fields(this.historyByDate),
+          ...fields(this.historyBySet),
           CustomFlatButton(labelTitle: 'Add set',onTap: () => {addSet()})
         ],
       ),
@@ -61,18 +61,17 @@ class _ExerciseCardState extends State<ExerciseCard> {
     super.dispose();
   }
 
-  void saveHistoryEntry() {
+  void saveHistoryEntry(String workoutId) {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day, 2);
     
     for (var i = 0; i < this.kgInputData.length; i++) {
-      HistoryRequest.postHistoryEntry(widget.workoutId, widget.exerciseId, new History(
+      HistoryRequest.postHistoryEntry(workoutId == '' ? widget.workoutId : workoutId, widget.exerciseId, new History(
         kg: new Kg(numberDecimal: this.kgInputData[i].text),
         repetitions: int.tryParse(this.repsInputData[i].text),
         repetitionsInReserve: 2,
         date: today.toIso8601String(),
-        exerciseId: widget.exerciseId,
-        workoutId: widget.workoutId
+        setNo: i+1
       ));
     }
   }
@@ -88,9 +87,9 @@ class _ExerciseCardState extends State<ExerciseCard> {
     setState(() {
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
-      historyByDate = processHistoryList(historyResponse);
-      if (historyByDate != null) {
-        for (var item in historyByDate) {
+      historyBySet = processHistoryList(historyResponse);
+      if (historyBySet != null) {
+        for (var item in historyBySet) {
           kgInputData.add(TextEditingController());
           repsInputData.add(TextEditingController());
         }
@@ -126,10 +125,10 @@ class _ExerciseCardState extends State<ExerciseCard> {
       history.add(new History(kg: new Kg()));
       kgInputData.add(TextEditingController());
       repsInputData.add(TextEditingController());
-      if (historyByDate == null) {
-        historyByDate = [[history.last]];
+      if (historyBySet == null) {
+        historyBySet = [[history.last]];
       } else {
-        historyByDate.add([history.last]);
+        historyBySet.add([history.last]);
       }
     });
   }
@@ -155,7 +154,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
         key: Key(entry.hashCode.toString()),
         onDismissed: (direction) {
           setState(() {
-            historyByDate.remove(entry);
+            historyBySet.remove(entry);
             for (var item in entry) {
               history.remove(item);
             }
