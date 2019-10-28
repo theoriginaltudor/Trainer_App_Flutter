@@ -5,6 +5,7 @@ import '../components/custom_text_field.dart';
 import '../models/history.dart';
 import '../models/history_request.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:convert';
 
 
 class ExerciseCard extends StatefulWidget {
@@ -116,7 +117,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
       }
       newList.add(tempList);
     }
-    print('processed list ' + newList.toString());
+    // print('processed list ' + jsonEncode(newList));s
     return newList;
   }
 
@@ -172,6 +173,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
               },) : CarouselSlider(
                 height: 60.0,
                 items: carouselItems(entry, index),
+                initialPage: entry.length,
                 enableInfiniteScroll: false
               )
             ),

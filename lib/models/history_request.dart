@@ -58,11 +58,11 @@ class HistoryRequest {
   static Future<HistoryRequest> postHistoryEntry(String workoutId, String exerciseId, History entry) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(entry.toJson());
-    print(body);
+    // print(body);
     final response = await http.post('http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId', headers: headers, body: body);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
-      print(response.body);
+      // print(response.body);
       return HistoryRequest.fromJson(jsonDecode(response.body));
     } else {
       // If that response was not OK, throw an error.
