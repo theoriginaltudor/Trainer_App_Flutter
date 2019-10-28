@@ -11,6 +11,9 @@ class AccountInfo extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Account Info'),
+      ),
       body: ListView(
         children: [
         // Turn the texts in textfields with values so they can be changed

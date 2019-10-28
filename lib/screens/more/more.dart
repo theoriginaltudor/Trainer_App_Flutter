@@ -4,17 +4,17 @@ import '../../components/custom_flat_button.dart';
 class More extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final labelTitles = ['Account Info', 'Logout'];
-
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 2,
-        itemBuilder: (context, index) => _itemBuilder(labelTitles[index]),
+      body: ListView(
+        children: <Widget>[
+          CustomFlatButton(labelTitle: 'Account Info', onTap: () => {
+            Navigator.pushNamed(context, '/info')
+          },), 
+          CustomFlatButton(labelTitle: 'Logout', onTap: () => {
+            Navigator.pushNamed(context, '/')
+          },),
+        ],
       ),
     );
-  }
-
-  Widget _itemBuilder(String labelTitle) {
-    return CustomFlatButton(labelTitle: labelTitle);
   }
 }

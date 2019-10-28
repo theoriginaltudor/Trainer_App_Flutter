@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           screen = Training(arguments['workout']);
           break;
         case AccountInfoRoute:
-          screen = AccountInfo();
+          screen = AccountInfo(email: 'My email',trainer: 'Trainer');
           break;
         case CalendarRoute:
           screen = CalendarPage(arguments['workouts']);
