@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/models/exercise_dao.dart';
 import './custom_flat_button.dart';
 import '../models/exercise.dart';
 import '../models/exercise_request.dart';
@@ -36,6 +37,8 @@ class _AllExercisesState extends State<AllExercises> {
 
   void populateExerciseList() async {
     var exerciseResponse = await ExerciseRequest.fetchAllExercises();
+    var test = await ExerciseDao().getAllSortedByName();
+    print(test);
     setState(() {
      allExercises = exerciseResponse.data;
     });

@@ -1,5 +1,6 @@
 import 'package:trainer_app_flutter/models/exercise.dart';
 import 'package:http/http.dart' as http;
+import 'package:trainer_app_flutter/models/exercise_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
 
@@ -33,23 +34,37 @@ class ExerciseRequest {
   }
 
   static Future<ExerciseRequest> fetchAllExercises() async {
-    final response = await http.get('http://${global.serverIp}:2000/api/exercises/');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return ExerciseRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response =
+          await http.get('http://${global.serverIp}:2000/api/exercises/');
+      if (response.statusCode == 200) {
+        var request = ExerciseRequest.fromJson(jsonDecode(response.body));
+        // If server returns an OK response, parse the JSON.
+        return request;
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return ExerciseRequest(success: false, data: null);
+      }
+    } catch (error) {
+      print(error);
+      return ExerciseRequest(
+          success: false, data: await ExerciseDao().getAllSortedByName());
     }
   }
 
   static Future<ExerciseRequest> fetchExercises(List<String> exerciseList) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(exerciseList);
-    final response = await http.post('http://${global.serverIp}:2000/api/exercise-list/', headers: headers, body: body);
+    final response = await http.post(
+      'http://${global.serverIp}:2000/api/exercise-list/',
+      headers: headers,
+      body: body,
+    );
     if (response.statusCode == 200) {
+      var request = ExerciseRequest.fromJson(jsonDecode(response.body));
       // If server returns an OK response, parse the JSON.
-      return ExerciseRequest.fromJson(jsonDecode(response.body));
+      return request;
     } else {
       // If that response was not OK, throw an error.
       throw Exception(response.body);
@@ -57,13 +72,21 @@ class ExerciseRequest {
   }
 
   static Future<ExerciseRequest> fetchExercise(String exerciseId) async {
-    final response = await http.get('http://${global.serverIp}:2000/api/exercise/$exerciseId');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return ExerciseRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response = await http
+          .get('http://${global.serverIp}:2000/api/exercise/$exerciseId');
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        return ExerciseRequest.fromJson(jsonDecode(response.body));
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return ExerciseRequest(success: false, data: null);
+      }
+    } catch (error) {
+      print(error);
+      return ExerciseRequest(
+          success: false, data: await ExerciseDao().getExercise(exerciseId));
     }
   }
 }
