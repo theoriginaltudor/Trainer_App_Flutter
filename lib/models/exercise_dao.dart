@@ -30,8 +30,33 @@ class ExerciseDao {
     );
   }
 
+  // Future deleteAll() async {
+  //   final finder = Finder(filter: Filter.notEquals('name', 'Test'));
+  //   await _exerciseStore.delete(
+  //     await _db,
+  //     finder: finder,
+  //   );
+  // }
+
   Future getExercise(String exerciseId) async {
     final finder = Finder(filter: Filter.equals('_id', exerciseId));
+    final recordSnapshot = await _exerciseStore.find(
+      await _db,
+      finder: finder,
+    );
+
+    return recordSnapshot.map((snapshot) {
+      final exercise = Exercise.fromJson(snapshot.value);
+      return exercise;
+    }).toList();
+  }
+
+  Future getExercises(List<String> exerciseIds) async {
+    List<Filter> filters;
+    for (var id in exerciseIds) {
+      filters.add(Filter.equals('_id', id));
+    }
+    final finder = Finder(filter: Filter.or(filters));
     final recordSnapshot = await _exerciseStore.find(
       await _db,
       finder: finder,

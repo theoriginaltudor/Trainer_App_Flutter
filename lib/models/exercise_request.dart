@@ -53,21 +53,28 @@ class ExerciseRequest {
     }
   }
 
-  static Future<ExerciseRequest> fetchExercises(List<String> exerciseList) async {
-    Map<String, String> headers = {'Content-type': 'application/json'};
-    String body = jsonEncode(exerciseList);
-    final response = await http.post(
-      'http://${global.serverIp}:2000/api/exercise-list/',
-      headers: headers,
-      body: body,
-    );
-    if (response.statusCode == 200) {
-      var request = ExerciseRequest.fromJson(jsonDecode(response.body));
-      // If server returns an OK response, parse the JSON.
-      return request;
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+  static Future<ExerciseRequest> fetchExercises(
+      List<String> exerciseList) async {
+    try {
+      Map<String, String> headers = {'Content-type': 'application/json'};
+      String body = jsonEncode(exerciseList);
+      final response = await http.post(
+        'http://${global.serverIp}:2000/api/exercise-list/',
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        var request = ExerciseRequest.fromJson(jsonDecode(response.body));
+        // If server returns an OK response, parse the JSON.
+        return request;
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return ExerciseRequest(success: false, data: null);
+      }
+    } catch (error) {
+      print(error);
+      return ExerciseRequest(success: false, data: await ExerciseDao().getExercises(exerciseList));
     }
   }
 
