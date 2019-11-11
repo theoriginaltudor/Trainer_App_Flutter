@@ -46,7 +46,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                 Text(this.exerciseName, textAlign: TextAlign.center),
                 Text(this.widget.recomendation),
                 ...fields(this.historyBySet),
-                CustomFlatButton(labelTitle: 'Add set', onTap: () => {addSet()})
+                CustomFlatButton(labelTitle: 'Add set', onTap: addSet),
               ],
             ),
     );
@@ -183,7 +183,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                               ? CustomFlatButton(
                                   labelTitle: 'No history',
                                   horizontalPadding: 0.0,
-                                  onTap: () => {print('No data')},
+                                  onTap: () => print('No data'),
                                 )
                               : CarouselSlider(
                                   height: 60.0,
@@ -211,7 +211,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   'kg x' +
                   item.repetitions.toString()),
               horizontalPadding: 0.0,
-              onTap: () => {fillPrevious(index, item)},
+              onTap: () => fillPrevious(index, item),
             ))
         .toList();
     return itemList;

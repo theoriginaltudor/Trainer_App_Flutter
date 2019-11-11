@@ -8,17 +8,20 @@ class Measurements extends StatelessWidget {
     final labelTitles = ['Weight', 'Chest', 'Calfs', 'Arms', 'Waist'];
 
     return Scaffold(
-        body: ListView(children: [
-      ...textFields(labelTitles),
-      CustomFlatButton(
-        labelTitle: 'Save',
-        horizontalPadding: 10.0,
+      body: ListView(
+        children: [
+          ...textFields(labelTitles),
+          CustomFlatButton(
+            labelTitle: 'Save',
+            horizontalPadding: 10.0,
+          ),
+          CustomFlatButton(
+            labelTitle: 'See graphs',
+            horizontalPadding: 10.0,
+          )
+        ],
       ),
-      CustomFlatButton(
-        labelTitle: 'See graphs',
-        horizontalPadding: 10.0,
-      )
-    ]));
+    );
   }
 
   List<Widget> textFields(List<String> labelTitles) {

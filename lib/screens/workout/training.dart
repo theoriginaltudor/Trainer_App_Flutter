@@ -25,25 +25,37 @@ class _TrainingState extends State<Training> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Training'),
-            CustomFlatButton(labelTitle: this._sTimer, onTap: () => {
-              changeTimerState()
-            },)
-          ]
+            CustomFlatButton(
+              labelTitle: this._sTimer,
+              onTap: changeTimerState,
+            ),
+          ],
         ),
       ),
       body: ListView(
         children: [
-          CustomFlatButton(labelTitle: 'Finish workout', onTap: () => {onFinishWorkout()},),
-          CustomFlatButton(labelTitle: 'Cancel workout', onTap: () => {Navigator.pop(context)},),
-          ...cards(widget.workout.exerciseList, widget.workout.recomendationsList),
-          CustomFlatButton(labelTitle: 'Add exercise', onTap: () => {addExercise()},),
+          CustomFlatButton(
+            labelTitle: 'Finish workout',
+            onTap: onFinishWorkout,
+          ),
+          CustomFlatButton(
+            labelTitle: 'Cancel workout',
+            onTap: () => Navigator.pop(context),
+          ),
+          ...cards(
+            widget.workout.exerciseList,
+            widget.workout.recomendationsList,
+          ),
+          CustomFlatButton(
+            labelTitle: 'Add exercise',
+            onTap: addExercise,
+          ),
         ],
       ),
     );
@@ -51,18 +63,18 @@ class _TrainingState extends State<Training> {
 
   Future onFinishWorkout() async {
     if (widget.workout.name == 'New workout') {
-      WorkoutRequest.createWorkout(widget.workout).then(((response) => {
+      WorkoutRequest.createWorkout(widget.workout).then((response) {
         // print(jsonEncode(response.toJson()))
         for (var card in this.cardsList) {
-          card.saveData(workoutId: response.data.first.sId)
+          card.saveData(workoutId: response.data.first.sId);
         }
-      }));
+      });
     } else {
       for (var card in this.cardsList) {
         card.saveData();
       }
     }
-    
+
     Navigator.pop(context);
   }
 
@@ -77,7 +89,7 @@ class _TrainingState extends State<Training> {
     } else {
       // start timer
       setState(() {
-       _timerRunning = true;
+        _timerRunning = true;
       });
       startTimer();
     }
@@ -92,15 +104,20 @@ class _TrainingState extends State<Training> {
       startTimer();
     }
     setState(() {
-      _sTimer = (this._iTimer ~/ 60).toString().padLeft(2, '0') + ':' + (this._iTimer % 60).toString().padLeft(2, '0');
+      _sTimer = (this._iTimer ~/ 60).toString().padLeft(2, '0') +
+          ':' +
+          (this._iTimer % 60).toString().padLeft(2, '0');
       _iTimer = _iTimer + 1;
     });
   }
 
   void addExercise() async {
-    await showDialog(context: context, builder: (BuildContext context) {
-      return AllExercises();
-    }).then((response) => {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AllExercises();
+      },
+    ).then((response) {
       setState(() {
         if (widget.workout.exerciseList == null) {
           widget.workout.exerciseList = response;
@@ -111,15 +128,29 @@ class _TrainingState extends State<Training> {
         for (var item in response) {
           widget.workout.recomendationsList.add('Not defined');
         }
-      })
+      });
     });
   }
 
-  List<ExerciseCard> cards(List<String> exerciseIds, List<String> recomendations) {
+  List<ExerciseCard> cards(
+    List<String> exerciseIds,
+    List<String> recomendations,
+  ) {
     if (exerciseIds == null) {
       return <ExerciseCard>[];
     }
-    this.cardsList = exerciseIds.asMap().map((index, id) => MapEntry(index, ExerciseCard(workoutId: widget.workout.sId ,exerciseId: id,recomendation: recomendations[index]))).values.toList();
+    this.cardsList = exerciseIds
+        .asMap()
+        .map((index, id) => MapEntry(
+              index,
+              ExerciseCard(
+                workoutId: widget.workout.sId,
+                exerciseId: id,
+                recomendation: recomendations[index],
+              ),
+            ))
+        .values
+        .toList();
     return this.cardsList;
   }
 }

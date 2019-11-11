@@ -8,10 +8,8 @@ import '../../variables.dart' as global;
 class Workouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: 
-      FutureBuilder(
+      body: FutureBuilder(
         future: WorkoutRequest.fetchWorkouts(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -19,9 +17,27 @@ class Workouts extends StatelessWidget {
 
             return ListView(
               children: [
-                CustomFlatButton(labelTitle: 'New Workout', onTap: () => openTraining(context, new Workout(name: 'New workout', clientId: global.userId))),
-                CustomFlatButton(labelTitle: 'Copy previous', onTap: () => openCalendar(context, workouts)),
-                ...cards(context, snapshot.data.data)
+                CustomFlatButton(
+                  labelTitle: 'New Workout',
+                  onTap: () => openTraining(
+                    context,
+                    new Workout(
+                      name: 'New workout',
+                      clientId: global.userId,
+                    ),
+                  ),
+                ),
+                CustomFlatButton(
+                  labelTitle: 'Copy previous',
+                  onTap: () => openCalendar(
+                    context,
+                    workouts,
+                  ),
+                ),
+                ...cards(
+                  context,
+                  snapshot.data.data,
+                )
               ],
             );
           } else if (snapshot.hasError) {
@@ -31,16 +47,24 @@ class Workouts extends StatelessWidget {
           // By default, show a loading spinner.
           return CircularProgressIndicator();
         },
-      ),    
+      ),
     );
   }
 
   openTraining(BuildContext context, Workout workout) {
-    Navigator.pushNamed(context, '/training', arguments: {'workout': workout});
+    Navigator.pushNamed(
+      context,
+      '/training',
+      arguments: {'workout': workout},
+    );
   }
-  
+
   openCalendar(BuildContext context, List<Workout> workouts) {
-    Navigator.pushNamed(context, '/calendar', arguments: {'workouts': workouts});
+    Navigator.pushNamed(
+      context,
+      '/calendar',
+      arguments: {'workouts': workouts},
+    );
   }
 
   List<Widget> cards(BuildContext context, List<Workout> workoutsList) {
@@ -50,6 +74,11 @@ class Workouts extends StatelessWidget {
         i--;
       }
     }
-    return workoutsList.map((workout) => CustomCard(workout: workout,onTap: () => openTraining(context, workout))).toList();
+    return workoutsList
+        .map((workout) => CustomCard(
+              workout: workout,
+              onTap: () => openTraining(context, workout),
+            ))
+        .toList();
   }
 }

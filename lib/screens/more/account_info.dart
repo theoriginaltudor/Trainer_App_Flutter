@@ -9,18 +9,17 @@ class AccountInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Account Info'),
       ),
       body: ListView(
         children: [
-        // Turn the texts in textfields with values so they can be changed
+          // Turn the texts in textfields with values so they can be changed
           Text('Your email is : ${this.email}'),
           Text('Your trainer is : ${this.trainer}'),
-          CustomFlatButton(labelTitle: 'Update')
-        ]
+          CustomFlatButton(labelTitle: 'Update'),
+        ],
       ),
     );
   }

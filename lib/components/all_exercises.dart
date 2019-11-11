@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/models/exercise_dao.dart';
 import './custom_flat_button.dart';
 import '../models/exercise.dart';
 import '../models/exercise_request.dart';
-class AllExercises extends StatefulWidget {
 
+class AllExercises extends StatefulWidget {
   AllExercises();
 
   @override
@@ -22,14 +21,17 @@ class _AllExercisesState extends State<AllExercises> {
     super.initState();
     populateExerciseList();
   }
-  
+
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.5)),
       child: ListView(
         children: <Widget>[
           ...fields(this.allExercises),
-          CustomFlatButton(labelTitle: 'Done', onTap: () => {Navigator.of(context).pop(addedExercises)},)
+          CustomFlatButton(
+            labelTitle: 'Done',
+            onTap: () => Navigator.of(context).pop(addedExercises),
+          ),
         ],
       ),
     );
@@ -38,7 +40,7 @@ class _AllExercisesState extends State<AllExercises> {
   void populateExerciseList() async {
     var exerciseResponse = await ExerciseRequest.fetchAllExercises();
     setState(() {
-     allExercises = exerciseResponse.data;
+      allExercises = exerciseResponse.data;
     });
   }
 
@@ -50,6 +52,13 @@ class _AllExercisesState extends State<AllExercises> {
   }
 
   List<Widget> fields(List<Exercise> exercisesList) {
-    return exercisesList == null ? [CircularProgressIndicator()] : exercisesList.map((item) => CustomFlatButton(labelTitle: item.name, onTap: () => {this.selectAction(item)},)).toList();
+    return exercisesList == null
+        ? [CircularProgressIndicator()]
+        : exercisesList
+            .map((item) => CustomFlatButton(
+                  labelTitle: item.name,
+                  onTap: () => this.selectAction(item),
+                ))
+            .toList();
   }
 }
