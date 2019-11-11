@@ -6,7 +6,10 @@ class UserRequest {
   bool success;
   List<User> data;
 
-  UserRequest({this.success, this.data});
+  UserRequest({
+    this.success,
+    this.data,
+  });
 
   UserRequest.fromJson(Map<String, dynamic> json) {
     success = json['success'];
@@ -28,7 +31,8 @@ class UserRequest {
   }
 
   static Future<UserRequest> fetchUserId(String email) async {
-    final response = await http.get('http://${global.serverIp}:2000/api/client-id/$email');
+    final response =
+        await http.get('http://${global.serverIp}:2000/api/client-id/$email');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return UserRequest.fromJson(jsonDecode(response.body));
@@ -44,7 +48,11 @@ class User {
   String email;
   String trainerID;
 
-  User({this.sId, this.email, this.trainerID});
+  User({
+    this.sId,
+    this.email,
+    this.trainerID,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

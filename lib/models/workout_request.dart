@@ -13,11 +13,9 @@ class WorkoutRequest {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<Workout>();
-      
+
       try {
-        json['data'].forEach((v) {
-          data.add(new Workout.fromJson(v));
-        });
+        json['data'].forEach((v) => data.add(new Workout.fromJson(v)));
       } catch (e) {
         data.add(new Workout.fromJson(json['data']));
       }
@@ -34,7 +32,8 @@ class WorkoutRequest {
   }
 
   static Future<WorkoutRequest> fetchWorkouts() async {
-    final response = await http.get('http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
+    final response = await http.get(
+        'http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return WorkoutRequest.fromJson(jsonDecode(response.body));
@@ -47,7 +46,11 @@ class WorkoutRequest {
   static Future<WorkoutRequest> createWorkout(Workout workout) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(workout.toJson());
-    final response = await http.post('http://${global.serverIp}:2000/api/create-workout/', headers: headers, body: body);
+    final response = await http.post(
+      'http://${global.serverIp}:2000/api/create-workout/',
+      headers: headers,
+      body: body,
+    );
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return WorkoutRequest.fromJson(jsonDecode(response.body));

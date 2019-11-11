@@ -5,12 +5,13 @@ class Workout {
   String name;
   String clientId;
 
-  Workout(
-      {this.exerciseList,
-      this.recomendationsList,
-      this.sId,
-      this.name,
-      this.clientId});
+  Workout({
+    this.exerciseList,
+    this.recomendationsList,
+    this.sId,
+    this.name,
+    this.clientId,
+  });
 
   Workout.fromJson(Map<String, dynamic> json) {
     exerciseList = json['exerciseList'].cast<String>();

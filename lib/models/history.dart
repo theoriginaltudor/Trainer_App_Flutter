@@ -9,16 +9,17 @@ class History {
   String clientId;
   int setNo;
 
-  History(
-      {this.sId,
-      this.kg,
-      this.repetitions,
-      this.repetitionsInReserve,
-      this.date,
-      this.exerciseId,
-      this.workoutId,
-      this.clientId,
-      this.setNo});
+  History({
+    this.sId,
+    this.kg,
+    this.repetitions,
+    this.repetitionsInReserve,
+    this.date,
+    this.exerciseId,
+    this.workoutId,
+    this.clientId,
+    this.setNo,
+  });
 
   History.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

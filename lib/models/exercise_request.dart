@@ -44,7 +44,10 @@ class ExerciseRequest {
       } else {
         // If that response was not OK, throw an error.
         print(response.body);
-        return ExerciseRequest(success: false, data: null);
+        return ExerciseRequest(
+          success: false,
+          data: null,
+        );
       }
     } catch (error) {
       print(error);
@@ -70,11 +73,17 @@ class ExerciseRequest {
       } else {
         // If that response was not OK, throw an error.
         print(response.body);
-        return ExerciseRequest(success: false, data: null);
+        return ExerciseRequest(
+          success: false,
+          data: null,
+        );
       }
     } catch (error) {
       print(error);
-      return ExerciseRequest(success: false, data: await ExerciseDao().getExercises(exerciseList));
+      return ExerciseRequest(
+        success: false,
+        data: await ExerciseDao().getExercises(exerciseList),
+      );
     }
   }
 
@@ -88,12 +97,17 @@ class ExerciseRequest {
       } else {
         // If that response was not OK, throw an error.
         print(response.body);
-        return ExerciseRequest(success: false, data: null);
+        return ExerciseRequest(
+          success: false,
+          data: null,
+        );
       }
     } catch (error) {
       print(error);
       return ExerciseRequest(
-          success: false, data: await ExerciseDao().getExercise(exerciseId));
+        success: false,
+        data: await ExerciseDao().getExercise(exerciseId),
+      );
     }
   }
 }

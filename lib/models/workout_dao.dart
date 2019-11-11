@@ -44,9 +44,11 @@ class WorkoutDao {
   }
 
   Future<List<Workout>> getAllSortedByName() async {
-    final finder = Finder(sortOrders: [
-      SortOrder('name'),
-    ]);
+    final finder = Finder(
+      sortOrders: [
+        SortOrder('name'),
+      ],
+    );
 
     final recordSnapshot = await _workoutsStore.find(
       await _db,

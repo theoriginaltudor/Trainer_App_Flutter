@@ -20,7 +20,6 @@ class HistoryRequest {
       } catch (e) {
         data.add(new History.fromJson(json['data']));
       }
-      
     }
   }
 
@@ -33,8 +32,12 @@ class HistoryRequest {
     return data;
   }
 
-  static Future<HistoryRequest> fetchHistoryExercise(String exerciseId, String workoutId) async {
-    final response = await http.get('http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
+  static Future<HistoryRequest> fetchHistoryExercise(
+    String exerciseId,
+    String workoutId,
+  ) async {
+    final response = await http.get(
+        'http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return HistoryRequest.fromJson(jsonDecode(response.body));
@@ -45,7 +48,8 @@ class HistoryRequest {
   }
 
   static Future<HistoryRequest> fetchHistoryWorkout(String workoutId) async {
-    final response = await http.get('http://${global.serverIp}:2000/api/history-for-client/${global.userId}/for-workout/$workoutId');
+    final response = await http.get(
+        'http://${global.serverIp}:2000/api/history-for-client/${global.userId}/for-workout/$workoutId');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return HistoryRequest.fromJson(jsonDecode(response.body));
@@ -55,11 +59,19 @@ class HistoryRequest {
     }
   }
 
-  static Future<HistoryRequest> postHistoryEntry(String workoutId, String exerciseId, History entry) async {
+  static Future<HistoryRequest> postHistoryEntry(
+    String workoutId,
+    String exerciseId,
+    History entry,
+  ) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(entry.toJson());
     // print(body);
-    final response = await http.post('http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId', headers: headers, body: body);
+    final response = await http.post(
+      'http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId',
+      headers: headers,
+      body: body,
+    );
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       // print(response.body);
