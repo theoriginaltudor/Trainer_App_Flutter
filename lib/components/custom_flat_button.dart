@@ -19,7 +19,7 @@ class CustomFlatButton extends StatelessWidget {
           disabledTextColor: Colors.black,
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.blueAccent,
-          onPressed: onTap,
+          onPressed: this.onTap,
           child: Text(
             labelTitle,
             style: TextStyle(fontSize: 20.0),

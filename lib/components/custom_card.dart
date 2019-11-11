@@ -3,7 +3,6 @@ import 'package:trainer_app_flutter/models/exercise.dart';
 import '../models/workout.dart';
 import '../models/exercise_request.dart';
 
-
 class CustomCard extends StatelessWidget {
   final Workout workout;
   final Function onTap;
@@ -22,9 +21,7 @@ class CustomCard extends StatelessWidget {
             margin: EdgeInsets.fromLTRB(30, 10, 30, 0),
             child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
-              onTap: () => {
-                this.onTap()
-              },
+              onTap: this.onTap,
               child: Container(
                 padding: EdgeInsets.all(10),
                 height: 100,
@@ -37,8 +34,8 @@ class CustomCard extends StatelessWidget {
               ),
             ),
           );
-        } else if(snapshot.hasError) {
-            return Text('${snapshot.error}');
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
         }
         return CircularProgressIndicator();
       },
@@ -47,9 +44,12 @@ class CustomCard extends StatelessWidget {
 
   List<Widget> fields(List<Exercise> exercises) {
     try {
-      return exercises.asMap()
-        .map((index, exercise) => MapEntry(index, Text(exercise.name + ' ' + workout.recomendationsList[index]))).
-        values.toList();
+      return exercises
+          .asMap()
+          .map((index, exercise) => MapEntry(index,
+              Text(exercise.name + ' ' + workout.recomendationsList[index])))
+          .values
+          .toList();
     } catch (e) {
       print(e);
       return <Widget>[];

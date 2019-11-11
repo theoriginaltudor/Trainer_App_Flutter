@@ -10,23 +10,24 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: controller == null ? 
-        TextField(
-          obscureText: false,
-          onEditingComplete: () => {this.onChange()},
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: labelTitle,
-          ),
-        ) :
-        TextField(
-          obscureText: false,
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: labelTitle,
-          ),
-        ));
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: controller == null
+          ? TextField(
+              obscureText: false,
+              onEditingComplete: this.onChange,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: labelTitle,
+              ),
+            )
+          : TextField(
+              obscureText: false,
+              controller: controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: labelTitle,
+              ),
+            ),
+    );
   }
 }
