@@ -33,7 +33,7 @@ class History {
     setNo = json['setNo'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool withIds = false}) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     // data['_id'] = this.sId;
     if (this.kg != null) {
@@ -43,9 +43,12 @@ class History {
     data['repetitionsInReserve'] = this.repetitionsInReserve;
     data['date'] = this.date;
     data['setNo'] = this.setNo;
-    // data['exerciseId'] = this.exerciseId;
-    // data['workoutId'] = this.workoutId;
-    // data['clientId'] = this.clientId;
+    if (withIds) {
+      data['exerciseId'] = this.exerciseId;
+      data['workoutId'] = this.workoutId;
+      data['clientId'] = this.clientId;
+    }
+
     return data;
   }
 }

@@ -10,20 +10,26 @@ class HistoryDao {
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   Future insert(History history) async {
-    await _historyStore.add(await _db, history.toJson());
+    List duplicate = await getHistory(history.sId);
+    if (duplicate.isEmpty) {
+      await _historyStore.record(history.sId).put(
+            await _db,
+            history.toJson(withIds: true),
+          );
+    }
   }
 
   Future update(History history) async {
-    final finder = Finder(filter: Filter.equals('_id', history.sId));
+    final finder = Finder(filter: Filter.byKey(history.sId));
     await _historyStore.update(
       await _db,
-      history.toJson(),
+      history.toJson(withIds: true),
       finder: finder,
     );
   }
 
   Future delete(History history) async {
-    final finder = Finder(filter: Filter.equals('_id', history.sId));
+    final finder = Finder(filter: Filter.byKey(history.sId));
     await _historyStore.delete(
       await _db,
       finder: finder,
@@ -31,7 +37,7 @@ class HistoryDao {
   }
 
   Future getHistory(String historyId) async {
-    final finder = Finder(filter: Filter.equals('_id', historyId));
+    final finder = Finder(filter: Filter.byKey(historyId));
     final recordSnapshot = await _historyStore.find(
       await _db,
       finder: finder,

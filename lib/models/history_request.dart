@@ -1,5 +1,6 @@
 import 'package:trainer_app_flutter/models/history.dart';
 import 'package:http/http.dart' as http;
+import 'package:trainer_app_flutter/models/history_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
 
@@ -36,26 +37,52 @@ class HistoryRequest {
     String exerciseId,
     String workoutId,
   ) async {
-    final response = await http.get(
-        'http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return HistoryRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response = await http.get(
+          'http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        return HistoryRequest.fromJson(jsonDecode(response.body));
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return HistoryRequest(
+          success: false,
+          data: null,
+        );
+      }
+    } catch (e) {
+      print(e);
+      // TODO: change to use both IDs instead of just workoutId
+      return HistoryRequest(
+        success: false,
+        data: await HistoryDao().getHistory(workoutId),
+      );
     }
   }
 
   static Future<HistoryRequest> fetchHistoryWorkout(String workoutId) async {
-    final response = await http.get(
-        'http://${global.serverIp}:2000/api/history-for-client/${global.userId}/for-workout/$workoutId');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return HistoryRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response = await http.get(
+          'http://${global.serverIp}:2000/api/history-for-client/${global.userId}/for-workout/$workoutId');
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        return HistoryRequest.fromJson(jsonDecode(response.body));
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return HistoryRequest(
+          success: false,
+          data: null,
+        );
+      }
+    } catch (e) {
+      print(e);
+      // TODO: change method on hsitory_dao
+      return HistoryRequest(
+        success: false,
+        data: await HistoryDao().getHistory(workoutId),
+      );
     }
   }
 

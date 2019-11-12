@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:trainer_app_flutter/models/workout_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
 import 'package:trainer_app_flutter/models/workout.dart';
@@ -32,14 +33,19 @@ class WorkoutRequest {
   }
 
   static Future<WorkoutRequest> fetchWorkouts() async {
-    final response = await http.get(
+    try {final response = await http.get(
         'http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       return WorkoutRequest.fromJson(jsonDecode(response.body));
     } else {
       // If that response was not OK, throw an error.
-      throw Exception('Failed to load Workouts');
+      print('Failed to load Workouts');
+      return WorkoutRequest(success: false, data: null,);
+    }} catch (e) {
+      print(e);
+      // TODO: change method on DAO to search for userId
+      return WorkoutRequest(success: false, data: await WorkoutDao().getWorkout(global.userId),);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/screens/sync/sync.dart';
 import './screens/workout/calendar.dart';
 import './screens/login/login.dart';
 import './screens/more/account_info.dart';
@@ -10,6 +11,7 @@ const TabsRoute = '/tabs';
 const TrainingRoute = '/training';
 const AccountInfoRoute = '/info';
 const CalendarRoute = '/calendar';
+const SyncingRoute = '/syncing';
 
 class MyApp extends StatelessWidget {
   @override
@@ -39,6 +41,9 @@ class MyApp extends StatelessWidget {
           break;
         case CalendarRoute:
           screen = CalendarPage(arguments['workouts']);
+          break;
+        case SyncingRoute:
+          screen = Sync();
           break;
         default:
           return null;

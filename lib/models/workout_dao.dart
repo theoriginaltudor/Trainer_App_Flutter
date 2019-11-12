@@ -10,11 +10,14 @@ class WorkoutDao {
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   Future insert(Workout workout) async {
-    await _workoutsStore.add(await _db, workout.toJson());
+    List duplicate = await getWorkout(workout.sId);
+    if (duplicate.isEmpty) {
+      await _workoutsStore.record(workout.sId).put(await _db, workout.toJson());
+    }
   }
 
   Future update(Workout workout) async {
-    final finder = Finder(filter: Filter.equals('name', workout.name));
+    final finder = Finder(filter: Filter.byKey(workout.sId));
     await _workoutsStore.update(
       await _db,
       workout.toJson(),
@@ -23,15 +26,15 @@ class WorkoutDao {
   }
 
   Future delete(Workout workout) async {
-    final finder = Finder(filter: Filter.equals('name', workout.name));
+    final finder = Finder(filter: Filter.byKey(workout.sId));
     await _workoutsStore.delete(
       await _db,
       finder: finder,
     );
   }
 
-  Future getworkout(String workoutId) async {
-    final finder = Finder(filter: Filter.equals('_id', workoutId));
+  Future getWorkout(String workoutId) async {
+    final finder = Finder(filter: Filter.byKey(workoutId));
     final recordSnapshot = await _workoutsStore.find(
       await _db,
       finder: finder,

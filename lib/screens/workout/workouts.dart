@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/app.dart';
 import '../../models/workout.dart';
 import '../../models/workout_request.dart';
 import '../../components/custom_flat_button.dart';
@@ -54,7 +55,7 @@ class Workouts extends StatelessWidget {
   openTraining(BuildContext context, Workout workout) {
     Navigator.pushNamed(
       context,
-      '/training',
+      TrainingRoute,
       arguments: {'workout': workout},
     );
   }
@@ -62,7 +63,7 @@ class Workouts extends StatelessWidget {
   openCalendar(BuildContext context, List<Workout> workouts) {
     Navigator.pushNamed(
       context,
-      '/calendar',
+      CalendarRoute,
       arguments: {'workouts': workouts},
     );
   }

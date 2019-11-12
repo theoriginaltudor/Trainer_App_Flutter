@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainer_app_flutter/app.dart';
 import 'package:trainer_app_flutter/models/user_request.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/custom_flat_button.dart';
@@ -40,8 +41,9 @@ class Login extends StatelessWidget {
       response =
           (await UserRequest.fetchUserId(controllers.first.text)).data.first;
       global.userId = response.sId;
-      Navigator.pushNamed(context, '/tabs');
+      Navigator.pushNamed(context, SyncingRoute);
     } catch (e) {
+      print(e);
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text('The email you used does not exist'),

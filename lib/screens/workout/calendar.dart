@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:trainer_app_flutter/app.dart';
 import 'package:trainer_app_flutter/components/custom_card.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
 import '../../models/history_request.dart';
@@ -123,7 +124,7 @@ class _CalendarPageState extends State<CalendarPage> with TickerProviderStateMix
   }
 
   openTraining(BuildContext context, Workout workout) {
-    Navigator.pushNamed(context, '/training', arguments: {'workout': workout});
+    Navigator.pushNamed(context, TrainingRoute, arguments: {'workout': workout});
   }
 
   List<Widget> exercisesList(List<String> list) {

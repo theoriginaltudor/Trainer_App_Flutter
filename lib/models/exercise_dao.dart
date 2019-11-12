@@ -10,11 +10,14 @@ class ExerciseDao {
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   Future insert(Exercise exercise) async {
-    await _exerciseStore.add(await _db, exercise.toJson());
+    List duplicate = await getExercise(exercise.sId);
+    if (duplicate.isEmpty) {
+      await _exerciseStore.record(exercise.sId).put(await _db, exercise.toJson());
+    }
   }
 
   Future update(Exercise exercise) async {
-    final finder = Finder(filter: Filter.equals('name', exercise.name));
+    final finder = Finder(filter: Filter.byKey(exercise.sId));
     await _exerciseStore.update(
       await _db,
       exercise.toJson(),
@@ -23,7 +26,7 @@ class ExerciseDao {
   }
 
   Future delete(Exercise exercise) async {
-    final finder = Finder(filter: Filter.equals('name', exercise.name));
+    final finder = Finder(filter: Filter.byKey(exercise.sId));
     await _exerciseStore.delete(
       await _db,
       finder: finder,
@@ -39,7 +42,7 @@ class ExerciseDao {
   // }
 
   Future getExercise(String exerciseId) async {
-    final finder = Finder(filter: Filter.equals('_id', exerciseId));
+    final finder = Finder(filter: Filter.byKey(exerciseId));
     final recordSnapshot = await _exerciseStore.find(
       await _db,
       finder: finder,
@@ -54,7 +57,7 @@ class ExerciseDao {
   Future getExercises(List<String> exerciseIds) async {
     List<Filter> filters;
     for (var id in exerciseIds) {
-      filters.add(Filter.equals('_id', id));
+      filters.add(Filter.byKey(id));
     }
     final finder = Finder(filter: Filter.or(filters));
     final recordSnapshot = await _exerciseStore.find(
