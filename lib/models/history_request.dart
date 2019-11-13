@@ -33,13 +33,10 @@ class HistoryRequest {
     return data;
   }
 
-  static Future<HistoryRequest> fetchHistoryExercise(
-    String exerciseId,
-    String workoutId,
-  ) async {
+  static Future<HistoryRequest> fetchHistoryExercise(String exerciseId) async {
     try {
       final response = await http.get(
-          'http://${global.serverIp}:2000/api/history-for-workout/$workoutId/for-exercise/$exerciseId');
+          'http://${global.serverIp}:2000/api/history-for-trainer/${global.userId}/for-exercise/$exerciseId');
       if (response.statusCode == 200) {
         // If server returns an OK response, parse the JSON.
         return HistoryRequest.fromJson(jsonDecode(response.body));
@@ -53,10 +50,9 @@ class HistoryRequest {
       }
     } catch (e) {
       print(e);
-      // TODO: change to use both IDs instead of just workoutId
       return HistoryRequest(
         success: false,
-        data: await HistoryDao().getHistory(workoutId),
+        data: await HistoryDao().getHistoryForExercise(exerciseId),
       );
     }
   }
@@ -78,10 +74,9 @@ class HistoryRequest {
       }
     } catch (e) {
       print(e);
-      // TODO: change method on hsitory_dao
       return HistoryRequest(
         success: false,
-        data: await HistoryDao().getHistory(workoutId),
+        data: await HistoryDao().getHistoryForWorkout(workoutId),
       );
     }
   }

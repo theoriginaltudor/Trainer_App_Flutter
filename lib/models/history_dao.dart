@@ -49,6 +49,32 @@ class HistoryDao {
     }).toList();
   }
 
+  Future getHistoryForExercise(String exerciseId) async {
+    final finder = Finder(filter: Filter.equals("clientId", exerciseId));
+    final recordSnapshot = await _historyStore.find(
+      await _db,
+      finder: finder,
+    );
+
+    return recordSnapshot.map((snapshot) {
+      final history = History.fromJson(snapshot.value);
+      return history;
+    }).toList();
+  }
+
+  Future getHistoryForWorkout(String workoutId) async {
+    final finder = Finder(filter: Filter.equals("workoutId", workoutId));
+    final recordSnapshot = await _historyStore.find(
+      await _db,
+      finder: finder,
+    );
+
+    return recordSnapshot.map((snapshot) {
+      final history = History.fromJson(snapshot.value);
+      return history;
+    }).toList();
+  }
+
   Future<List<History>> getAllSortedByName() async {
     final finder = Finder(sortOrders: [
       SortOrder('name'),

@@ -85,15 +85,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
     if (widget.workoutId == null) {
       historyResponse = <History>[];
     } else {
-      historyResponse = (await HistoryRequest.fetchHistoryExercise(
-        widget.exerciseId,
-        widget.workoutId,
-      ))
-          .data;
+      historyResponse =
+          (await HistoryRequest.fetchHistoryExercise(widget.exerciseId)).data;
     }
     var exerciseResponse =
         (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {
+      //TODO this is null when running offline
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
       historyBySet = processHistoryList(historyResponse);
@@ -159,8 +157,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
       return historyLists
           .asMap()
           .map((index, entry) => MapEntry(
-              index,
-              Dismissible(
+                index,
+                Dismissible(
                   background: Container(color: Colors.red),
                   key: Key(entry.hashCode.toString()),
                   onDismissed: (direction) {
@@ -179,6 +177,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
+                        // TODO: show history even if is a new set
                           child: entry.first.sId == null
                               ? CustomFlatButton(
                                   labelTitle: 'No history',
@@ -198,7 +197,9 @@ class _ExerciseCardState extends State<ExerciseCard> {
                             CustomTextField(controller: repsInputData[index]),
                       )
                     ],
-                  ))))
+                  ),
+                ),
+              ))
           .values
           .toList();
     }

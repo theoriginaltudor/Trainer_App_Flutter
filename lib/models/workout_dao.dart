@@ -46,6 +46,19 @@ class WorkoutDao {
     }).toList();
   }
 
+  Future getWorkoutsForUser(String userId) async {
+    final finder = Finder(filter: Filter.equals('clientId', userId));
+    final recordSnapshot = await _workoutsStore.find(
+      await _db,
+      finder: finder,
+    );
+
+    return recordSnapshot.map((snapshot) {
+      final workout = Workout.fromJson(snapshot.value);
+      return workout;
+    }).toList();
+  }
+
   Future<List<Workout>> getAllSortedByName() async {
     final finder = Finder(
       sortOrders: [

@@ -44,8 +44,7 @@ class WorkoutRequest {
       return WorkoutRequest(success: false, data: null,);
     }} catch (e) {
       print(e);
-      // TODO: change method on DAO to search for userId
-      return WorkoutRequest(success: false, data: await WorkoutDao().getWorkout(global.userId),);
+      return WorkoutRequest(success: false, data: await WorkoutDao().getWorkoutsForUser(global.userId),);
     }
   }
 

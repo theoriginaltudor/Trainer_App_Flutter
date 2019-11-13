@@ -55,7 +55,7 @@ class ExerciseDao {
   }
 
   Future getExercises(List<String> exerciseIds) async {
-    List<Filter> filters;
+    List<Filter> filters = [];
     for (var id in exerciseIds) {
       filters.add(Filter.byKey(id));
     }
