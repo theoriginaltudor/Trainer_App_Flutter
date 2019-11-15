@@ -38,8 +38,11 @@ class CustomCard extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
-        return SpinKitCubeGrid(
-          color: Colors.white,
+        return Padding(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: SpinKitCubeGrid(
+            color: Colors.white,
+          ),
         );
       },
     );
