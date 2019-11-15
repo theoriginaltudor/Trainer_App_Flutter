@@ -81,13 +81,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   void populateHistoryList() async {
-    var historyResponse;
-    if (widget.workoutId == null) {
-      historyResponse = <History>[];
-    } else {
-      historyResponse =
-          (await HistoryRequest.fetchHistoryExercise(widget.exerciseId)).data;
-    }
+    var historyResponse =
+        (await HistoryRequest.fetchHistoryExercise(widget.exerciseId)).data;
     var exerciseResponse =
         (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {
@@ -177,7 +172,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        // TODO: show history even if is a new set
+                          // TODO: show history even if is a new set
                           child: entry.first.sId == null
                               ? CustomFlatButton(
                                   labelTitle: 'No history',
