@@ -172,7 +172,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                          // TODO: show history even if is a new set
                           child: entry.first.sId == null
                               ? CustomFlatButton(
                                   labelTitle: 'No history',
