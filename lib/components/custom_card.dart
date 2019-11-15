@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trainer_app_flutter/models/exercise.dart';
 import '../models/workout.dart';
 import '../models/exercise_request.dart';
@@ -37,7 +38,9 @@ class CustomCard extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
-        return CircularProgressIndicator();
+        return SpinKitCubeGrid(
+          color: Colors.white,
+        );
       },
     );
   }

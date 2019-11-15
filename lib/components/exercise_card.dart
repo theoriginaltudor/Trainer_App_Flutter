@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../models/exercise_request.dart';
 import '../components/custom_flat_button.dart';
 import '../components/custom_text_field.dart';
@@ -39,7 +40,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
     return Container(
       padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
       child: this.history == null
-          ? CircularProgressIndicator()
+          ? SpinKitPouringHourglass(color: Colors.white,)
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -86,7 +87,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
     var exerciseResponse =
         (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {
-      //TODO this is null when running offline
+      //TODO this is null when running offline (i got an error at one point)
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
       historyBySet = processHistoryList(historyResponse);
@@ -147,7 +148,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   List<Widget> fields(List<List<History>> historyLists) {
     if (historyLists == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) => addSet());
-      return [CircularProgressIndicator()];
+      return [SpinKitPouringHourglass(color: Colors.white,)];
     } else {
       return historyLists
           .asMap()

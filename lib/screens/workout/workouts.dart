@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trainer_app_flutter/app.dart';
 import '../../models/workout.dart';
 import '../../models/workout_request.dart';
@@ -46,7 +47,7 @@ class Workouts extends StatelessWidget {
           }
 
           // By default, show a loading spinner.
-          return CircularProgressIndicator();
+          return SpinKitPouringHourglass(color: Colors.white, size: 100.0,);
         },
       ),
     );

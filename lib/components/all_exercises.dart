@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import './custom_flat_button.dart';
 import '../models/exercise.dart';
 import '../models/exercise_request.dart';
@@ -53,7 +54,12 @@ class _AllExercisesState extends State<AllExercises> {
 
   List<Widget> fields(List<Exercise> exercisesList) {
     return exercisesList == null
-        ? [CircularProgressIndicator()]
+        ? [
+            SpinKitPouringHourglass(
+              color: Colors.white,
+              size: 100.0,
+            )
+          ]
         : exercisesList
             .map((item) => CustomFlatButton(
                   labelTitle: item.name,

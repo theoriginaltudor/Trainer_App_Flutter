@@ -9,6 +9,7 @@ import 'package:trainer_app_flutter/models/history_request.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
 import 'package:trainer_app_flutter/models/workout_dao.dart';
 import 'package:trainer_app_flutter/models/workout_request.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Sync extends StatefulWidget {
   @override
@@ -69,13 +70,21 @@ class _SyncState extends State<Sync> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(),
-          Text('The data is syncing online. Please wait a little'),
-        ],
+      body: SizedBox.expand(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SpinKitPouringHourglass(
+              color: Colors.white,
+              size: 100.0,
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Text('The data is syncing online. Please wait a little'),
+          ],
+        ),
       ),
     );
   }
