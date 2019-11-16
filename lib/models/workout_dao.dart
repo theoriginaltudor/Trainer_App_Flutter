@@ -68,7 +68,6 @@ class WorkoutDao {
 
     final recordSnapshot = await _workoutsStore.find(
       await _db,
-      finder: finder,
     );
 
     return recordSnapshot.map((snapshot) {

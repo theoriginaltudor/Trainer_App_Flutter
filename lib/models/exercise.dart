@@ -13,7 +13,7 @@ class Exercise {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    // data['_id'] = this.sId;
+    data['_id'] = this.sId;
     data['name'] = this.name;
     data['description'] = this.description;
     return data;

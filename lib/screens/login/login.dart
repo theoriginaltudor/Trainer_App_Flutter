@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/app.dart';
 import 'package:trainer_app_flutter/models/user_request.dart';
@@ -22,9 +24,7 @@ class Login extends StatelessWidget {
             CustomFlatButton(
               labelTitle: 'Login',
               horizontalPadding: 10.0,
-              onTap: () =>
-                _onLoginTap(context, controllers)
-              ,
+              onTap: () => _onLoginTap(context, controllers),
             ),
           ],
         ),
@@ -44,11 +44,20 @@ class Login extends StatelessWidget {
       Navigator.pushNamed(context, SyncingRoute);
     } catch (e) {
       print(e);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('The email you used does not exist'),
-        ),
-      );
+      if (e is SocketException) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('There is no network connection'),
+          ),
+        );
+        Navigator.pushNamed(context, TabsRoute);
+      } else {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('The email you used does not exist'),
+          ),
+        );
+      }
     }
   }
 

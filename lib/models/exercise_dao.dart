@@ -33,13 +33,13 @@ class ExerciseDao {
     );
   }
 
-  // Future deleteAll() async {
-  //   final finder = Finder(filter: Filter.notEquals('name', 'Test'));
-  //   await _exerciseStore.delete(
-  //     await _db,
-  //     finder: finder,
-  //   );
-  // }
+  Future deleteAll() async {
+    final finder = Finder(filter: Filter.notEquals('name', 'Test'));
+    await _exerciseStore.delete(
+      await _db,
+      finder: finder,
+    );
+  }
 
   Future getExercise(String exerciseId) async {
     final finder = Finder(filter: Filter.byKey(exerciseId));
@@ -47,8 +47,8 @@ class ExerciseDao {
       await _db,
       finder: finder,
     );
-
     return recordSnapshot.map((snapshot) {
+      print(snapshot.value);
       final exercise = Exercise.fromJson(snapshot.value);
       return exercise;
     }).toList();
@@ -78,7 +78,6 @@ class ExerciseDao {
 
     final recordSnapshot = await _exerciseStore.find(
       await _db,
-      finder: finder,
     );
 
     return recordSnapshot.map((snapshot) {

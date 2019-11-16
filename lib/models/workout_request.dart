@@ -44,7 +44,7 @@ class WorkoutRequest {
       return WorkoutRequest(success: false, data: null,);
     }} catch (e) {
       print(e);
-      return WorkoutRequest(success: false, data: await WorkoutDao().getWorkoutsForUser(global.userId),);
+      return WorkoutRequest(success: false, data: await WorkoutDao().getAllSortedByName(),);
     }
   }
 

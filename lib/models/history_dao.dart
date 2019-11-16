@@ -82,7 +82,6 @@ class HistoryDao {
 
     final recordSnapshot = await _historyStore.find(
       await _db,
-      finder: finder,
     );
 
     return recordSnapshot.map((snapshot) {
