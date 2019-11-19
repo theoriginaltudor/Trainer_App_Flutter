@@ -33,35 +33,57 @@ class WorkoutRequest {
   }
 
   static Future<WorkoutRequest> fetchWorkouts() async {
-    try {final response = await http.get(
-        'http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return WorkoutRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      print('Failed to load Workouts');
-      return WorkoutRequest(success: false, data: null,);
-    }} catch (e) {
+    try {
+      final response = await http.get(
+          'http://${global.serverIp}:2000/api/workouts-for-client/${global.userId}');
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        return WorkoutRequest.fromJson(jsonDecode(response.body));
+      } else {
+        // If that response was not OK, throw an error.
+        print('Failed to load Workouts');
+        return WorkoutRequest(
+          success: false,
+          data: null,
+        );
+      }
+    } catch (e) {
       print(e);
-      return WorkoutRequest(success: false, data: await WorkoutDao().getAllSortedByName(),);
+      return WorkoutRequest(
+        success: false,
+        data: await WorkoutDao().getAllSortedByName(),
+      );
     }
   }
 
   static Future<WorkoutRequest> createWorkout(Workout workout) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(workout.toJson());
-    final response = await http.post(
-      'http://${global.serverIp}:2000/api/create-workout/',
-      headers: headers,
-      body: body,
-    );
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return WorkoutRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response = await http.post(
+        'http://${global.serverIp}:2000/api/create-workout/',
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        WorkoutRequest request = WorkoutRequest.fromJson(jsonDecode(response.body));
+        await WorkoutDao().insert(request.data.first);
+        return request;
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return WorkoutRequest(
+          success: false,
+          data: null,
+        );
+      }
+    } catch (e) {
+      print(e);
+      return WorkoutRequest(
+        success: false,
+        data: await WorkoutDao().insert(workout),
+      );
     }
   }
 }

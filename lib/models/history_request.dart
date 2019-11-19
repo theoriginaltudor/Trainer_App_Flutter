@@ -89,18 +89,31 @@ class HistoryRequest {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body = jsonEncode(entry.toJson());
     // print(body);
-    final response = await http.post(
-      'http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId',
-      headers: headers,
-      body: body,
-    );
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      // print(response.body);
-      return HistoryRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
+    try {
+      final response = await http.post(
+        'http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId',
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        HistoryRequest request = HistoryRequest.fromJson(jsonDecode(response.body));
+        await HistoryDao().insert(request.data.first);
+        return request;
+      } else {
+        // If that response was not OK, throw an error.
+        print(response.body);
+        return HistoryRequest(
+          success: false,
+          data: null,
+        );
+      }
+    } catch (e) {
+      print(e);
+      return HistoryRequest(
+        success: false,
+        data: await HistoryDao().insert(entry),
+      );
     }
   }
 }

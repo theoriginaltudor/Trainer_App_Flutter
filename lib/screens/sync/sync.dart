@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/app.dart';
 import 'package:trainer_app_flutter/models/exercise.dart';
@@ -22,13 +24,14 @@ class _SyncState extends State<Sync> {
     super.initState();
     this._syncData();
   }
-
+// TODO: test the sync both ways
   void _syncData() async {
+    // await ExerciseDao().deleteAll();
     var results = await Future.wait([
       this._syncExercises(),
       this._syncWorkouts(),
     ]);
-    results.map((result) => print(result));
+    results.map((result) => print("results of the sync" + result));
     Navigator.pushNamed(context, TabsRoute);
     // Future.delayed(
     //   Duration(seconds: 2),
@@ -47,11 +50,17 @@ class _SyncState extends State<Sync> {
 
   Future _syncWorkouts() async {
     List<Workout> workouts = (await WorkoutRequest.fetchWorkouts()).data;
-
+    // await WorkoutDao().deleteAll();
+    List<Workout> offlineWorkouts = await WorkoutDao().getAllSortedByName();
+    // test to see if the offline workout will be uploaded
+    Future.forEach(offlineWorkouts, (workout) async {
+      await WorkoutRequest.createWorkout(workout);
+    },);
     return Future.forEach(
       workouts,
       (workout) async {
-        await WorkoutDao().insert(workout);
+        var response = await WorkoutDao().insert(workout);
+        print("workout insert return " + jsonEncode(response));
         await this._syncHistory(workout.sId);
       },
     );
@@ -61,6 +70,11 @@ class _SyncState extends State<Sync> {
     List<History> historyList =
         (await HistoryRequest.fetchHistoryWorkout(workoutId)).data;
 
+    List<History> offlineHistoryList = await HistoryDao().getAllSortedByName();
+
+    Future.forEach(offlineHistoryList, (History history) async {
+      await HistoryRequest.postHistoryEntry(history.workoutId, history.exerciseId, history);
+    },);
     return Future.forEach(
       historyList,
       (history) async => await HistoryDao().insert(history),

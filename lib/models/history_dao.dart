@@ -9,14 +9,12 @@ class HistoryDao {
 
   Future<Database> get _db async => await AppDatabase.instance.database;
 
-  Future insert(History history) async {
-    List duplicate = await getHistory(history.sId);
-    if (duplicate.isEmpty) {
-      await _historyStore.record(history.sId).put(
-            await _db,
-            history.toJson(withIds: true),
-          );
-    }
+  Future<List<History>> insert(History history) async {
+    var response = await _historyStore
+        .record(history.sId)
+        .put(await _db, history.toJson(withIds: true));
+    History newEntry = History.fromJson(response);
+    return <History>[newEntry];
   }
 
   Future update(History history) async {
@@ -28,8 +26,8 @@ class HistoryDao {
     );
   }
 
-  Future delete(History history) async {
-    final finder = Finder(filter: Filter.byKey(history.sId));
+  Future delete(String historyId) async {
+    final finder = Finder(filter: Filter.byKey(historyId));
     await _historyStore.delete(
       await _db,
       finder: finder,
@@ -76,9 +74,9 @@ class HistoryDao {
   }
 
   Future<List<History>> getAllSortedByName() async {
-    final finder = Finder(sortOrders: [
-      SortOrder('name'),
-    ]);
+    // final finder = Finder(sortOrders: [
+    //   SortOrder('name'),
+    // ]);
 
     final recordSnapshot = await _historyStore.find(
       await _db,

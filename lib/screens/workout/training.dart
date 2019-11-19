@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/components/all_exercises.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
@@ -63,8 +64,9 @@ class _TrainingState extends State<Training> {
 
   Future onFinishWorkout() async {
     if (widget.workout.name == 'New workout') {
+      // TODO: create the id before sending the request
       WorkoutRequest.createWorkout(widget.workout).then((response) {
-        // print(jsonEncode(response.toJson()))
+        print("onFinishWorkout new workout " + jsonEncode(response.toJson()));
         for (var card in this.cardsList) {
           card.saveData(workoutId: response.data.first.sId);
         }

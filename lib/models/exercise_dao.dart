@@ -9,11 +9,11 @@ class ExerciseDao {
 
   Future<Database> get _db async => await AppDatabase.instance.database;
 
-  Future insert(Exercise exercise) async {
-    List duplicate = await getExercise(exercise.sId);
-    if (duplicate.isEmpty) {
-      await _exerciseStore.record(exercise.sId).put(await _db, exercise.toJson());
-    }
+  Future<List<Exercise>> insert(Exercise exercise) async {
+    var response = await _exerciseStore.record(exercise.sId).put(await _db, exercise.toJson());
+    Exercise newEntry = Exercise.fromJson(response);
+
+    return <Exercise>[newEntry];
   }
 
   Future update(Exercise exercise) async {
@@ -25,8 +25,8 @@ class ExerciseDao {
     );
   }
 
-  Future delete(Exercise exercise) async {
-    final finder = Finder(filter: Filter.byKey(exercise.sId));
+  Future delete(String exerciseId) async {
+    final finder = Finder(filter: Filter.byKey(exerciseId));
     await _exerciseStore.delete(
       await _db,
       finder: finder,
@@ -48,7 +48,7 @@ class ExerciseDao {
       finder: finder,
     );
     return recordSnapshot.map((snapshot) {
-      print(snapshot.value);
+      // print("exercise_dao " + snapshot.value);
       final exercise = Exercise.fromJson(snapshot.value);
       return exercise;
     }).toList();
@@ -72,9 +72,9 @@ class ExerciseDao {
   }
 
   Future<List<Exercise>> getAllSortedByName() async {
-    final finder = Finder(sortOrders: [
-      SortOrder('name'),
-    ]);
+    // final finder = Finder(sortOrders: [
+    //   SortOrder('name'),
+    // ]);
 
     final recordSnapshot = await _exerciseStore.find(
       await _db,

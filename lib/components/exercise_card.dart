@@ -68,6 +68,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
     DateTime today = DateTime(now.year, now.month, now.day, 2);
 
     for (var i = 0; i < this.kgInputData.length; i++) {
+      // TODO: create id before making the request
       HistoryRequest.postHistoryEntry(
           workoutId == '' ? widget.workoutId : workoutId,
           widget.exerciseId,
@@ -87,7 +88,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
     var exerciseResponse =
         (await ExerciseRequest.fetchExercise(widget.exerciseId)).data;
     setState(() {
-      //TODO this is null when running offline (i got an error at one point)
       exerciseName = exerciseResponse.first.name;
       history = historyResponse;
       historyBySet = processHistoryList(historyResponse);
