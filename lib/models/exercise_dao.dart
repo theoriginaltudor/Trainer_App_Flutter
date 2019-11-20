@@ -34,10 +34,8 @@ class ExerciseDao {
   }
 
   Future deleteAll() async {
-    final finder = Finder(filter: Filter.notEquals('name', 'Test'));
     await _exerciseStore.delete(
       await _db,
-      finder: finder,
     );
   }
 

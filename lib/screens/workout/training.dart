@@ -64,7 +64,6 @@ class _TrainingState extends State<Training> {
 
   Future onFinishWorkout() async {
     if (widget.workout.name == 'New workout') {
-      // TODO: create the id before sending the request
       WorkoutRequest.createWorkout(widget.workout).then((response) {
         print("onFinishWorkout new workout " + jsonEncode(response.toJson()));
         for (var card in this.cardsList) {

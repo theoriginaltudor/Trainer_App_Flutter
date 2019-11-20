@@ -20,12 +20,14 @@ class Workout {
     name = json['name'];
     clientId = json['clientId'];
   }
-// TODO: do you need or not the _id in here
-  Map<String, dynamic> toJson() {
+
+  Map<String, dynamic> toJson({bool withId = false}) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['exerciseList'] = this.exerciseList;
     data['recomendationsList'] = this.recomendationsList;
-    data['_id'] = this.sId;
+    if (withId) {
+      data['_id'] = this.sId;
+    }
     data['name'] = this.name;
     data['clientId'] = this.clientId;
     return data;

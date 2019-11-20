@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:trainer_app_flutter/app.dart';
 import 'package:trainer_app_flutter/models/exercise.dart';
@@ -24,9 +22,9 @@ class _SyncState extends State<Sync> {
     super.initState();
     this._syncData();
   }
-// TODO: test the sync both ways
+
+// TODO: make the ids created by sembast acceptable for MongoDB
   void _syncData() async {
-    // await ExerciseDao().deleteAll();
     var results = await Future.wait([
       this._syncExercises(),
       this._syncWorkouts(),
@@ -50,17 +48,17 @@ class _SyncState extends State<Sync> {
 
   Future _syncWorkouts() async {
     List<Workout> workouts = (await WorkoutRequest.fetchWorkouts()).data;
-    // await WorkoutDao().deleteAll();
     List<Workout> offlineWorkouts = await WorkoutDao().getAllSortedByName();
-    // test to see if the offline workout will be uploaded
-    Future.forEach(offlineWorkouts, (workout) async {
-      await WorkoutRequest.createWorkout(workout);
-    },);
+    Future.forEach(
+      offlineWorkouts,
+      (workout) async {
+        await WorkoutRequest.createWorkout(workout);
+      },
+    );
     return Future.forEach(
       workouts,
       (workout) async {
-        var response = await WorkoutDao().insert(workout);
-        print("workout insert return " + jsonEncode(response));
+        await WorkoutDao().insert(workout);
         await this._syncHistory(workout.sId);
       },
     );
@@ -72,9 +70,13 @@ class _SyncState extends State<Sync> {
 
     List<History> offlineHistoryList = await HistoryDao().getAllSortedByName();
 
-    Future.forEach(offlineHistoryList, (History history) async {
-      await HistoryRequest.postHistoryEntry(history.workoutId, history.exerciseId, history);
-    },);
+    Future.forEach(
+      offlineHistoryList,
+      (History history) async {
+        await HistoryRequest.postHistoryEntry(
+            history.workoutId, history.exerciseId, history);
+      },
+    );
     return Future.forEach(
       historyList,
       (history) async => await HistoryDao().insert(history),

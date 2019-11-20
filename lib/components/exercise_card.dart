@@ -68,7 +68,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
     DateTime today = DateTime(now.year, now.month, now.day, 2);
 
     for (var i = 0; i < this.kgInputData.length; i++) {
-      // TODO: create id before making the request
       HistoryRequest.postHistoryEntry(
           workoutId == '' ? widget.workoutId : workoutId,
           widget.exerciseId,

@@ -10,17 +10,21 @@ class WorkoutDao {
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   Future<List<Workout>> insert(Workout workout) async {
-    var response = await _workoutsStore.record(workout.sId).put(await _db, workout.toJson());
-    Workout newEntry = Workout.fromJson(response);
-
-    return <Workout>[newEntry];
+    if (workout.sId == null) {
+      var key = await _workoutsStore.add(await _db, workout.toJson());
+      workout.sId = key;
+      await update(workout);
+    } else {
+      await _workoutsStore.record(workout.sId).put(await _db, workout.toJson(withId: true));
+    }
+    return <Workout>[workout];
   }
 
   Future update(Workout workout) async {
     final finder = Finder(filter: Filter.byKey(workout.sId));
     await _workoutsStore.update(
       await _db,
-      workout.toJson(),
+      workout.toJson(withId: true),
       finder: finder,
     );
   }

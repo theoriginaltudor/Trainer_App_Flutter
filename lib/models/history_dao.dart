@@ -10,11 +10,16 @@ class HistoryDao {
   Future<Database> get _db async => await AppDatabase.instance.database;
 
   Future<List<History>> insert(History history) async {
-    var response = await _historyStore
-        .record(history.sId)
-        .put(await _db, history.toJson(withIds: true));
-    History newEntry = History.fromJson(response);
-    return <History>[newEntry];
+    if (history.sId == null) {
+      var key = await _historyStore.add(await _db, history.toJson());
+      history.sId = key;
+      await update(history);
+    } else {
+      await _historyStore
+          .record(history.sId)
+          .put(await _db, history.toJson(withIds: true));
+    }
+    return <History>[history];
   }
 
   Future update(History history) async {
@@ -31,6 +36,12 @@ class HistoryDao {
     await _historyStore.delete(
       await _db,
       finder: finder,
+    );
+  }
+
+  Future deleteAll() async {
+    await _historyStore.delete(
+      await _db,
     );
   }
 

@@ -87,8 +87,12 @@ class HistoryRequest {
     History entry,
   ) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
-    String body = jsonEncode(entry.toJson());
-    // print(body);
+    String body;
+    if (entry.sId == null) {
+      body = jsonEncode(entry.toJson());
+    } else {
+      body = jsonEncode(entry.toJson(withIds: true));
+    }
     try {
       final response = await http.post(
         'http://${global.serverIp}:2000/api/new-history-entry/${global.userId}/$workoutId/$exerciseId',
@@ -110,6 +114,9 @@ class HistoryRequest {
       }
     } catch (e) {
       print(e);
+      entry.exerciseId = exerciseId;
+      entry.workoutId = workoutId;
+      entry.clientId = global.userId;
       return HistoryRequest(
         success: false,
         data: await HistoryDao().insert(entry),

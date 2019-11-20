@@ -35,7 +35,6 @@ class History {
 
   Map<String, dynamic> toJson({bool withIds = false}) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    // data['_id'] = this.sId;
     if (this.kg != null) {
       data['kg'] = this.kg.toJson();
     }
@@ -44,6 +43,7 @@ class History {
     data['date'] = this.date;
     data['setNo'] = this.setNo;
     if (withIds) {
+      data['_id'] = this.sId;
       data['exerciseId'] = this.exerciseId;
       data['workoutId'] = this.workoutId;
       data['clientId'] = this.clientId;

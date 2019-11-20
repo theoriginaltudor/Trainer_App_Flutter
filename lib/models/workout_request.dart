@@ -58,7 +58,12 @@ class WorkoutRequest {
 
   static Future<WorkoutRequest> createWorkout(Workout workout) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
-    String body = jsonEncode(workout.toJson());
+    String body;
+    if (workout.sId == null) {
+      body = jsonEncode(workout.toJson());
+    } else {
+      body = jsonEncode(workout.toJson(withId: true));
+    }
     try {
       final response = await http.post(
         'http://${global.serverIp}:2000/api/create-workout/',
@@ -67,7 +72,8 @@ class WorkoutRequest {
       );
       if (response.statusCode == 200) {
         // If server returns an OK response, parse the JSON.
-        WorkoutRequest request = WorkoutRequest.fromJson(jsonDecode(response.body));
+        WorkoutRequest request =
+            WorkoutRequest.fromJson(jsonDecode(response.body));
         await WorkoutDao().insert(request.data.first);
         return request;
       } else {
