@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:trainer_app_flutter/components/all_exercises.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
@@ -79,6 +80,9 @@ class _TrainingState extends State<Training> {
 
   void _openCamera() async {
     final File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+    final String path = (await getApplicationDocumentsDirectory()).path;
+    // TODO: create the workout.sId before creating the file
+    final File newVideo = await file.copy('$path/video_${widget.workout.sId}.mp4');
     print('We have a video file' + file.toString());
   }
 
