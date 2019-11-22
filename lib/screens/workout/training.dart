@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trainer_app_flutter/components/all_exercises.dart';
 import 'package:trainer_app_flutter/components/exercise_card.dart';
 import 'package:trainer_app_flutter/models/workout.dart';
@@ -59,7 +61,39 @@ class _TrainingState extends State<Training> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'video0',
+        tooltip: 'Record Video',
+        child: const Icon(Icons.videocam),
+        onPressed: _openCamera,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    retrieveLostData();
+  }
+
+  void _openCamera() async {
+    final File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+    print('We have a video file' + file.toString());
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      if (response.type == RetrieveType.video) {
+        print('We retrieved a video file' + response.file.toString());
+      }
+    } else {
+      print(response.exception.code);
+    }
   }
 
   Future onFinishWorkout() async {
