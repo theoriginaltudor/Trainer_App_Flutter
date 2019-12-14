@@ -1,6 +1,6 @@
-import 'package:trainer_app_flutter/models/history.dart';
+import '../models/history.dart';
 import 'package:http/http.dart' as http;
-import 'package:trainer_app_flutter/models/history_dao.dart';
+import '../models/history_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
 

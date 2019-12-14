@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/app.dart';
+import '../../app.dart';
 import '../../components/custom_flat_button.dart';
 
 class More extends StatelessWidget {

@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:trainer_app_flutter/components/all_exercises.dart';
-import 'package:trainer_app_flutter/components/exercise_card.dart';
-import 'package:trainer_app_flutter/models/workout.dart';
-import 'package:trainer_app_flutter/models/workout_request.dart';
+import '../../components/all_exercises.dart';
+import '../../components/exercise_card.dart';
+import '../../models/workout.dart';
+import '../../models/workout_request.dart';
 import '../../components/custom_flat_button.dart';
 
 class Training extends StatefulWidget {

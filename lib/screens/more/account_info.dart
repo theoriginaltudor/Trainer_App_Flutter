@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/models/history.dart';
-import 'package:trainer_app_flutter/models/history_dao.dart';
-import 'package:trainer_app_flutter/models/workout.dart';
-import 'package:trainer_app_flutter/models/workout_dao.dart';
+import '../../models/history.dart';
+import '../../models/history_dao.dart';
+import '../../models/workout.dart';
+import '../../models/workout_dao.dart';
 import '../../components/custom_flat_button.dart';
 
 class AccountInfo extends StatelessWidget {

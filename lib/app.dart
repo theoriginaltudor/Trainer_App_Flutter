@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/screens/sync/sync.dart';
+import './screens/sync/sync.dart';
 import './screens/workout/calendar.dart';
 import './screens/login/login.dart';
 import './screens/more/account_info.dart';

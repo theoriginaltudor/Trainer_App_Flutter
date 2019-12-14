@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:trainer_app_flutter/app.dart';
-import 'package:trainer_app_flutter/components/custom_card.dart';
-import 'package:trainer_app_flutter/models/workout.dart';
+import '../../app.dart';
+import '../../components/custom_card.dart';
+import '../../models/workout.dart';
 import '../../models/history_request.dart';
 
 class CalendarPage extends StatefulWidget {

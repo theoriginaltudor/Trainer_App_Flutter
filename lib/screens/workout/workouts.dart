@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:trainer_app_flutter/app.dart';
+import '../../app.dart';
 import '../../models/workout.dart';
 import '../../models/workout_request.dart';
 import '../../components/custom_flat_button.dart';

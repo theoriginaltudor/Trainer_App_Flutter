@@ -1,6 +1,6 @@
-import 'package:trainer_app_flutter/models/exercise.dart';
+import '../models/exercise.dart';
 import 'package:http/http.dart' as http;
-import 'package:trainer_app_flutter/models/exercise_dao.dart';
+import '../models/exercise_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
 

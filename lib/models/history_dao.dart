@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:trainer_app_flutter/models/history.dart';
+import '../models/history.dart';
 import '../data/app_database.dart';
 
 class HistoryDao {

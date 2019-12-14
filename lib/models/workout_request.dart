@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
-import 'package:trainer_app_flutter/models/workout_dao.dart';
+import '../models/workout_dao.dart';
 import 'dart:convert';
 import '../variables.dart' as global;
-import 'package:trainer_app_flutter/models/workout.dart';
+import '../models/workout.dart';
 
 class WorkoutRequest {
   bool success;

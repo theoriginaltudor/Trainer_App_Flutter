@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/app.dart';
-import 'package:trainer_app_flutter/models/exercise.dart';
-import 'package:trainer_app_flutter/models/exercise_dao.dart';
-import 'package:trainer_app_flutter/models/exercise_request.dart';
-import 'package:trainer_app_flutter/models/history.dart';
-import 'package:trainer_app_flutter/models/history_dao.dart';
-import 'package:trainer_app_flutter/models/history_request.dart';
-import 'package:trainer_app_flutter/models/workout.dart';
-import 'package:trainer_app_flutter/models/workout_dao.dart';
-import 'package:trainer_app_flutter/models/workout_request.dart';
+import '../../app.dart';
+import '../../models/exercise.dart';
+import '../../models/exercise_dao.dart';
+import '../../models/exercise_request.dart';
+import '../../models/history.dart';
+import '../../models/history_dao.dart';
+import '../../models/history_request.dart';
+import '../../models/workout.dart';
+import '../../models/workout_dao.dart';
+import '../../models/workout_request.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Sync extends StatefulWidget {

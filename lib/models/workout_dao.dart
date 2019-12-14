@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:trainer_app_flutter/models/workout.dart';
+import '../models/workout.dart';
 import '../data/app_database.dart';
 
 class WorkoutDao {

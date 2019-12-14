@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:trainer_app_flutter/app.dart';
-import 'package:trainer_app_flutter/models/user_request.dart';
+import '../../app.dart';
+import '../../models/user_request.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/custom_flat_button.dart';
 import '../../variables.dart' as global;
