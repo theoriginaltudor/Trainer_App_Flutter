@@ -69,7 +69,7 @@ class WorkoutDao {
   //   }).toList();
   // }
 
-  Future<List<Workout>> getAllSortedByName() async {
+  Future<List<Workout>> getAllData() async {
     // final finder = Finder(
     //   sortOrders: [
     //     SortOrder('name'),

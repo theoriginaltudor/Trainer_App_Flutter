@@ -51,7 +51,7 @@ class WorkoutRequest {
       print(e);
       return WorkoutRequest(
         success: false,
-        data: await WorkoutDao().getAllSortedByName(),
+        data: await WorkoutDao().getAllData(),
       );
     }
   }

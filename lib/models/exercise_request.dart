@@ -52,7 +52,7 @@ class ExerciseRequest {
     } catch (error) {
       print(error);
       return ExerciseRequest(
-          success: false, data: await ExerciseDao().getAllSortedByName());
+          success: false, data: await ExerciseDao().getAllData());
     }
   }
 

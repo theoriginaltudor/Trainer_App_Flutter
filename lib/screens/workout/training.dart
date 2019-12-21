@@ -83,7 +83,7 @@ class _TrainingState extends State<Training> {
     final String path = (await getApplicationDocumentsDirectory()).path;
     // TODO: create the workout.sId before creating the file
     final File newVideo = await file.copy('$path/video_${widget.workout.sId}.mp4');
-    print('We have a video file' + file.toString());
+    print('We have a video file' + newVideo.toString());
   }
 
   Future<void> retrieveLostData() async {
@@ -164,7 +164,7 @@ class _TrainingState extends State<Training> {
         } else {
           widget.workout.exerciseList.addAll(response);
         }
-        for (var item in response) {
+        for (var i = 0; i < response.length; i++) {
           widget.workout.recomendationsList.add('Not defined');
         }
       });

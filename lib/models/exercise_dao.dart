@@ -69,7 +69,7 @@ class ExerciseDao {
     }).toList();
   }
 
-  Future<List<Exercise>> getAllSortedByName() async {
+  Future<List<Exercise>> getAllData() async {
     // final finder = Finder(sortOrders: [
     //   SortOrder('name'),
     // ]);

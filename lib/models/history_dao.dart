@@ -84,7 +84,7 @@ class HistoryDao {
     }).toList();
   }
 
-  Future<List<History>> getAllSortedByName() async {
+  Future<List<History>> getAllData() async {
     // final finder = Finder(sortOrders: [
     //   SortOrder('name'),
     // ]);
