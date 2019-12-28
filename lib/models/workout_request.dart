@@ -59,11 +59,7 @@ class WorkoutRequest {
   static Future<WorkoutRequest> createWorkout(Workout workout) async {
     Map<String, String> headers = {'Content-type': 'application/json'};
     String body;
-    if (workout.sId == null) {
       body = jsonEncode(workout.toJson());
-    } else {
-      body = jsonEncode(workout.toJson(withId: true));
-    }
     try {
       final response = await http.post(
         'http://${global.serverIp}:2000/api/create-workout/',
@@ -86,9 +82,12 @@ class WorkoutRequest {
       }
     } catch (e) {
       print(e);
+      List<Workout> list = await WorkoutDao().insert(workout);
+      print('catch ' + list.first.toJson().toString());
+
       return WorkoutRequest(
         success: false,
-        data: await WorkoutDao().insert(workout),
+        data: list,
       );
     }
   }

@@ -25,13 +25,11 @@ class AccountInfo extends StatelessWidget {
           CustomFlatButton(
             labelTitle: 'Update',
             onTap: () async {
-              // await WorkoutDao().delete("-Lu7K1jjSXJQA4Qk3th5");
-              // await HistoryDao().delete("-Lu7K1lEm3hUcRV_QI_J");
+              // await WorkoutDao().deleteAll();
+              // await HistoryDao().delete("-LxBCtDlv6GAb7nKPc8c");
               List<Workout> workouts = await WorkoutDao().getAllData();
               for (var item in workouts) {
-                if (item.name == "New workout") {
-                  print(item.toJson(withId: true));
-                }
+                print(item.toJson(withId: true));
               }
               List<History> histories = await HistoryDao().getAllData();
               for (var item in histories) {

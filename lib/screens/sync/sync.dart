@@ -23,13 +23,13 @@ class _SyncState extends State<Sync> {
     this._syncData();
   }
 
-// TODO: make the ids created by sembast acceptable for MongoDB
+// TODO: what happens if user updates his workout
+// TODO: when offline client id is null
   void _syncData() async {
-    var results = await Future.wait([
+    await Future.wait([
       this._syncExercises(),
       this._syncWorkouts(),
     ]);
-    results.map((result) => print("results of the sync" + result));
     Navigator.pushNamed(context, TabsRoute);
     // Future.delayed(
     //   Duration(seconds: 2),
@@ -40,7 +40,7 @@ class _SyncState extends State<Sync> {
   Future _syncExercises() async {
     List<Exercise> exercises = (await ExerciseRequest.fetchAllExercises()).data;
 
-    return Future.forEach(
+    return await Future.forEach(
       exercises,
       (exercise) async => await ExerciseDao().insert(exercise),
     );
@@ -48,38 +48,50 @@ class _SyncState extends State<Sync> {
 
   Future _syncWorkouts() async {
     List<Workout> workouts = (await WorkoutRequest.fetchWorkouts()).data;
-    List<Workout> offlineWorkouts = await WorkoutDao().getAllSortedByName();
-    Future.forEach(
+    List<Workout> offlineWorkouts = await WorkoutDao().getAllData();
+
+    await Future.forEach(
       offlineWorkouts,
       (workout) async {
-        await WorkoutRequest.createWorkout(workout);
+        if (workout.sId.length != 24) {
+          await WorkoutDao().delete(workout.sId);
+          Workout newWorkout = (await WorkoutRequest.createWorkout(workout)).data.first;
+          await this._syncHistoryFromOffline(workout.sId, newWorkout.sId);
+        }
       },
     );
-    return Future.forEach(
+
+    return await Future.forEach(
       workouts,
       (workout) async {
         await WorkoutDao().insert(workout);
-        await this._syncHistory(workout.sId);
+        await this._syncHistoryFromOnline(workout.sId);
       },
     );
   }
 
-  Future _syncHistory(String workoutId) async {
+  Future _syncHistoryFromOnline(String workoutId) async {
     List<History> historyList =
         (await HistoryRequest.fetchHistoryWorkout(workoutId)).data;
 
-    List<History> offlineHistoryList = await HistoryDao().getAllSortedByName();
-
-    Future.forEach(
-      offlineHistoryList,
-      (History history) async {
-        await HistoryRequest.postHistoryEntry(
-            history.workoutId, history.exerciseId, history);
-      },
-    );
-    return Future.forEach(
+    return await Future.forEach(
       historyList,
       (history) async => await HistoryDao().insert(history),
+    );
+  }
+
+  Future _syncHistoryFromOffline(String oldWorkoutId, String newWorkoutId) async {
+    List<History> offlineHistoryList = await HistoryDao().getHistoryForWorkout(oldWorkoutId);
+
+    return await Future.forEach(
+      offlineHistoryList,
+      (History history) async {
+        if (history.sId.length != 24) {
+          await HistoryDao().delete(history.sId);
+          await HistoryRequest.postHistoryEntry(
+              newWorkoutId, history.exerciseId, history);
+        }
+      },
     );
   }
 
