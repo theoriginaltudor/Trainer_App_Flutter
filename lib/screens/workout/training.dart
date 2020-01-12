@@ -46,7 +46,7 @@ class _TrainingState extends State<Training> {
         children: [
           CustomFlatButton(
             labelTitle: 'Finish workout',
-            onTap: onFinishWorkout,
+            onTap: () => onFinishWorkout(context),
           ),
           CustomFlatButton(
             labelTitle: 'Cancel workout',
@@ -82,7 +82,8 @@ class _TrainingState extends State<Training> {
     final File file = await ImagePicker.pickVideo(source: ImageSource.camera);
     final String path = (await getApplicationDocumentsDirectory()).path;
     // TODO: create the workout.sId before creating the file
-    final File newVideo = await file.copy('$path/video_${widget.workout.sId}.mp4');
+    final File newVideo =
+        await file.copy('$path/video_${widget.workout.sId}.mp4');
     print('We have a video file' + newVideo.toString());
   }
 
@@ -100,21 +101,37 @@ class _TrainingState extends State<Training> {
     }
   }
 
-  Future onFinishWorkout() async {
-    if (widget.workout.name == 'New workout') {
-      WorkoutRequest.createWorkout(widget.workout).then((response) {
-        print("onFinishWorkout new workout " + jsonEncode(response.toJson()));
-        for (var card in this.cardsList) {
-          card.saveData(workoutId: response.data.first.sId);
-        }
-      });
-    } else {
+  onFinishWorkout(BuildContext context) {
+    bool validData = true;
+    if (this.cardsList.length > 0) {
       for (var card in this.cardsList) {
-        card.saveData();
+        if (!card.checkData()) validData = false;
       }
+    } else {
+      validData = false;
     }
+    if (validData) {
+      if (widget.workout.name == 'New workout') {
+        WorkoutRequest.createWorkout(widget.workout).then((response) {
+          print("onFinishWorkout new workout " + jsonEncode(response.toJson()));
+          for (var card in this.cardsList) {
+            card.saveData(workoutId: response.data.first.sId);
+          }
+        });
+      } else {
+        for (var card in this.cardsList) {
+          card.saveData();
+        }
+      }
 
-    Navigator.pop(context);
+      Navigator.pop(context);
+    } else {
+      // Scaffold.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text('Empty exercise detected'),
+      //     ),
+      //   );
+    }
   }
 
   void changeTimerState() {
@@ -157,17 +174,21 @@ class _TrainingState extends State<Training> {
         return AllExercises();
       },
     ).then((response) {
-      setState(() {
-        if (widget.workout.exerciseList == null) {
-          widget.workout.exerciseList = response;
-          widget.workout.recomendationsList = [];
-        } else {
-          widget.workout.exerciseList.addAll(response);
-        }
-        for (var i = 0; i < response.length; i++) {
-          widget.workout.recomendationsList.add('Not defined');
-        }
-      });
+      if (response != null) {
+        setState(() {
+          if (widget.workout.exerciseList == null) {
+            widget.workout.exerciseList = response;
+            widget.workout.recomendationsList = [];
+          } else {
+            widget.workout.exerciseList.addAll(response);
+          }
+          for (var i = 0; i < response.length; i++) {
+            widget.workout.recomendationsList.add('Not defined');
+          }
+        });
+      }
+    }, onError: (error) {
+      print('Error on show dialog: ' + error.toString());
     });
   }
 

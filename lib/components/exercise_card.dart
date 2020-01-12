@@ -20,6 +20,7 @@ class ExerciseCard extends StatefulWidget {
   }
 
   void saveData({String workoutId = ''}) => state.saveHistoryEntry(workoutId);
+  bool checkData() => state.checkData();
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
@@ -79,6 +80,10 @@ class _ExerciseCardState extends State<ExerciseCard> {
             setNo: i + 1,
           ));
     }
+  }
+
+  bool checkData() {
+    return this.kgInputData.length > 0;
   }
 
   void populateHistoryList() async {

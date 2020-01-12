@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -40,10 +41,11 @@ class Login extends StatelessWidget {
     try {
       response =
           (await UserRequest.fetchUserId(controllers.first.text)).data.first;
+      global.email = controllers.first.text;
       global.userId = response.sId;
       Navigator.pushNamed(context, SyncingRoute);
     } catch (e) {
-      print(e);
+      print('exeception' + e.toString());
       if (e is SocketException) {
         Scaffold.of(context).showSnackBar(
           SnackBar(

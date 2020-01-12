@@ -5,6 +5,8 @@ import './screens/login/login.dart';
 import './screens/more/account_info.dart';
 import './screens/home/tabs_page.dart';
 import './screens/workout/training.dart';
+import './variables.dart' as global;
+
 
 const LoginRoute = '/';
 const TabsRoute = '/tabs';
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
           screen = Training(arguments['workout']);
           break;
         case AccountInfoRoute:
-          screen = AccountInfo(email: 'My email',trainer: 'Trainer');
+          screen = AccountInfo(email: global.email ,trainer: 'Trainer');
           break;
         case CalendarRoute:
           screen = CalendarPage(arguments['workouts']);

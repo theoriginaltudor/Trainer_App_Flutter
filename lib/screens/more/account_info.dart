@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:update_project/components/custom_text_field.dart';
+import 'package:update_project/models/exercise.dart';
+import 'package:update_project/models/exercise_dao.dart';
 import '../../models/history.dart';
 import '../../models/history_dao.dart';
 import '../../models/workout.dart';
@@ -8,6 +11,7 @@ import '../../components/custom_flat_button.dart';
 class AccountInfo extends StatelessWidget {
   final String email;
   final String trainer;
+  final TextEditingController _textfieldData = TextEditingController();
 
   AccountInfo({this.email, this.trainer});
 
@@ -23,9 +27,9 @@ class AccountInfo extends StatelessWidget {
           Text('Your email is : ${this.email}'),
           Text('Your trainer is : ${this.trainer}'),
           CustomFlatButton(
-            labelTitle: 'Update',
+            labelTitle: 'Print local history (console)',
             onTap: () async {
-              // await WorkoutDao().deleteAll();
+              // await WorkoutDao().delete('5e1b197bcd89241f84ff9d80');
               // await HistoryDao().delete("-LxBCtDlv6GAb7nKPc8c");
               List<Workout> workouts = await WorkoutDao().getAllData();
               for (var item in workouts) {
@@ -37,6 +41,19 @@ class AccountInfo extends StatelessWidget {
               }
             },
           ),
+          CustomTextField(
+            labelTitle: 'Exercise Name',
+            controller: _textfieldData,
+          ),
+          CustomFlatButton(
+            labelTitle: 'Add exercise to local list',
+            onTap: () async {
+              Exercise e = Exercise(
+                  name: _textfieldData.text, description: _textfieldData.text);
+              await ExerciseDao().insert(e);
+              _textfieldData.clear();
+            },
+          )
         ],
       ),
     );

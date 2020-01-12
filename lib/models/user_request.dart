@@ -31,15 +31,20 @@ class UserRequest {
   }
 
   static Future<UserRequest> fetchUserId(String email) async {
-    final response =
-        await http.get('http://${global.serverIp}:2000/api/client-id/$email');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return UserRequest.fromJson(jsonDecode(response.body));
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception(response.body);
-    }
+    // try {
+      final response = await http
+          .get('http://${global.serverIp}:2000/api/client-id/$email');
+          // .timeout(new Duration(seconds: 3));
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+        return UserRequest.fromJson(jsonDecode(response.body));
+      } else {
+        // If that response was not OK, throw an error.
+        throw Exception(response.body);
+      }
+    // } catch (e) {
+      // throw Exception(e);
+    // }
   }
 }
 

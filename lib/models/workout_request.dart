@@ -18,6 +18,7 @@ class WorkoutRequest {
       try {
         json['data'].forEach((v) => data.add(new Workout.fromJson(v)));
       } catch (e) {
+        //TODO: check if the data in a list is null (that throws exeption)
         data.add(new Workout.fromJson(json['data']));
       }
     }
